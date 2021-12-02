@@ -1,9 +1,31 @@
+# data_logger.py
+"""
+    This is a sligthly enhanced data logger which connects automatically to an arduino/esp32.
+    It reads from the serial port and saves the data to a csv file with a time stamp in the name, so no previously
+    recorded data can be lost.
+    The use of this script is to log data from a PPG sensor like MAX30102.
+    So the expected readings are in the format:
+    millis, red, ir, sanmple_num
+
+    Any other format won't work at the moment, but this will be updated in the future.
+
+    You will need serial and its dependencies installed in your python enviroment to be able to use it.
+    For more informations please refer to: https://pyserial.readthedocs.io/en/latest/pyserial.html#installation
+"""
+
 import serial
 import serial.tools.list_ports
 import platform
 import sys
 import os
 import time
+
+# TODO Use the python CSV Library
+
+# TODO This script has to be implemented in a general way so that it's execution is independent of the transferred data
+
+# CSV ENCODING
+# TIME, RED, IR, NUM_SAMPLE
 
 # USER INITIALISATION
 
@@ -24,12 +46,15 @@ ser = None
 for port in ports:
     # MAC OS
     if platform.system() == "Darwin":
+        # This code prefers ESP32 over arduino on macos
         if "CP2104" in port.description:
             print("ESP 32 Detected.")
             ser = serial.Serial(port.device, baudrate=baud)
+            break
         if 'USB VID:PID=2341:0043' in port.hwid:
             print("Arduino Uno detected")
             ser = serial.Serial(port.device, baudrate=baud)
+            break
 
     # WINDOWS
     if platform.system() == "win32":
@@ -52,34 +77,44 @@ line = 0  # start at 0 because our header is 0 (not real data)
 
 file = open(FILE_PATH, "w")
 print('Created File with filename:', FILE_PATH)
-file.write("Red, IR \n")
+file.write('Millis,Red,IR,sample\n')  # TODO Do not hardcore the csv row headers
 
 # reset data values
 red = 0
 ir = 0
 ser.flush()
 ser.reset_input_buffer()
-
+# ser.write(0)  # reset the arduino
 while line <= samples:
-    # incoming = ser.read(9999)
-    # if len(incoming) > 0:
-    getData = str(ser.readline())
-    data = getData.split(sep=",")
+
+    # getData = ser.readline().decode()
+    getData = ser.readline().decode()
+
+    #  TODO Add filter to remove invalid data
+
+    data = getData.split(sep=',')
+
+    # Filter all non digit characters from the serial reading
+    i: int = 0
+    for _ in data:
+        data[i] = "".join(filter(str.isdigit, data[i]))
+        i += 1
 
     # Just in case something went wrong and the first received data portion is not valid
     try:
-        # Truncate the data strings so that just the blank numbers are content of the variables
-        red = data[0][6:]
-        if BOTH_LED:
-            ir = data[1][3:-5]
+        millis = data[0]
+        red = data[1]
+        ir = data[2]
+        sample = data[3]
     except IndexError:
+        # if an IndexError occurs there was likely a transmission error
         continue
 
-    write_data = str(red) + ", " + str(ir)
+    write_data = str(millis) + ',' + str(red) + ',' + str(ir) + ',' + str(sample)
     file.write(write_data + "\n")  # write data with a newline
 
     if PRINT_DATA:
-        print("Red={}, IR={}".format(red, ir))
+        print('Millis={}, Red={}, IR={}, sample={}'.format(millis, red, ir, sample))
 
     line = line + 1
 
