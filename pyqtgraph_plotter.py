@@ -85,80 +85,79 @@ def update():
     global p, ptr, curve1, data1, curves1, curve2, data2, curves2, curve3, data3, curves3
     line = codecs.decode((ser.readline()))
 
-    # ToDo: plot initialisiert falsch oder garnicht, wenn keine ganze zeile empfangen wird -> vorher buffer leeren?
-    #  TODO Add filter to remove invalid data
-
     DataArray = line.split(',')
-    millis = int(DataArray[0])
-    sensor_red = int(DataArray[1])
-    sensor_ir = int(DataArray[2])
 
-    print('Millis={}\t Red={}\t IR={}'.format(millis, sensor_red, sensor_ir))
+    if len(DataArray) > 2:          #  TODO Add filter to remove invalid data
+        millis = int(DataArray[0])
+        sensor_red = int(DataArray[1])
+        sensor_ir = int(DataArray[2])
 
-    with open(FILE_PATH, 'a', newline='') as outfile:
-        csv_writer = csv.writer(outfile)
-        csv_writer.writerow([millis, sensor_red, sensor_ir])
+        print('Millis={}\t Red={}\t IR={}'.format(millis, sensor_red, sensor_ir))
 
-    now = pg.ptime.time()
-    #for c in curves1:
-    #    c.setPos(-(now - startTime), 0)
-    for c in curves2:
-        c.setPos(-(now - startTime), 0)
-    for c in curves3:
-        c.setPos(-(now - startTime), 0)
+        with open(FILE_PATH, 'a', newline='') as outfile:
+            csv_writer = csv.writer(outfile)
+            csv_writer.writerow([millis, sensor_red, sensor_ir])
 
-    i = ptr % chunkSize
-    if i == 0:
-        #curve1 = p.plot(pen=(0, 255, 0), name="Green millis curve")
-        curve2 = p.plot(pen=(255, 0, 0), name="Red sensor_red curve")
-        curve3 = p.plot(pen=(0, 0, 255), name="Blue sensor_ir curve")
+        now = pg.ptime.time()
+        #for c in curves1:
+        #    c.setPos(-(now - startTime), 0)
+        for c in curves2:
+            c.setPos(-(now - startTime), 0)
+        for c in curves3:
+            c.setPos(-(now - startTime), 0)
 
-        #curves1.append(curve1)
-        curves2.append(curve2)
-        curves3.append(curve3)
+        i = ptr % chunkSize
+        if i == 0:
+            #curve1 = p.plot(pen=(0, 255, 0), name="Green millis curve")
+            curve2 = p.plot(pen=(255, 0, 0), name="Red sensor_red curve")
+            curve3 = p.plot(pen=(0, 0, 255), name="Blue sensor_ir curve")
 
-        last1 = data1[-1]
-        last2 = data2[-1]
-        last3 = data3[-1]
+            #curves1.append(curve1)
+            curves2.append(curve2)
+            curves3.append(curve3)
 
-        #data1 = np.empty((chunkSize + 1, 2))
-        data2 = np.empty((chunkSize + 1, 2))
-        data3 = np.empty((chunkSize + 1, 2))
+            last1 = data1[-1]
+            last2 = data2[-1]
+            last3 = data3[-1]
 
-        #data1[0] = last1
-        data2[0] = last2
-        data3[0] = last3
+            #data1 = np.empty((chunkSize + 1, 2))
+            data2 = np.empty((chunkSize + 1, 2))
+            data3 = np.empty((chunkSize + 1, 2))
 
-        #while len(curves1) > maxChunks:
-        #    c = curves1.pop(0)
-        #    p.removeItem(c)
-        while len(curves2) > maxChunks:
-            c = curves2.pop(0)
-            p.removeItem(c)
-        while len(curves3) > maxChunks:
-            c = curves3.pop(0)
-            p.removeItem(c)
+            #data1[0] = last1
+            data2[0] = last2
+            data3[0] = last3
 
-    else:
-        #curve1 = curves[-1]
-        curve2 = curves2[-1]
-        curve3 = curves3[-1]
+            #while len(curves1) > maxChunks:
+            #    c = curves1.pop(0)
+            #    p.removeItem(c)
+            while len(curves2) > maxChunks:
+                c = curves2.pop(0)
+                p.removeItem(c)
+            while len(curves3) > maxChunks:
+                c = curves3.pop(0)
+                p.removeItem(c)
 
-    #data1[i + 1, 0] = now - startTime
-    data2[i + 1, 0] = now - startTime
-    data3[i + 1, 0] = now - startTime
+        else:
+            #curve1 = curves[-1]
+            curve2 = curves2[-1]
+            curve3 = curves3[-1]
 
-    #data1[i + 1, 1] = int(millis)
-    data2[i + 1, 1] = int(sensor_red)
-    data3[i + 1, 1] = int(sensor_ir)
+        #data1[i + 1, 0] = now - startTime
+        data2[i + 1, 0] = now - startTime
+        data3[i + 1, 0] = now - startTime
 
-    #curve1.setData(x=data[:i + 2, 0], y=data[:i + 2, 1])
-    curve2.setData(x=data2[:i + 2, 0], y=data2[:i + 2, 1])
-    curve3.setData(x=data3[:i + 2, 0], y=data3[:i + 2, 1])
+        #data1[i + 1, 1] = int(millis)
+        data2[i + 1, 1] = int(sensor_red)
+        data3[i + 1, 1] = int(sensor_ir)
 
-    ptr += 1
+        #curve1.setData(x=data[:i + 2, 0], y=data[:i + 2, 1])
+        curve2.setData(x=data2[:i + 2, 0], y=data2[:i + 2, 1])
+        curve3.setData(x=data3[:i + 2, 0], y=data3[:i + 2, 1])
 
-    app.processEvents()
+        ptr += 1
+
+        app.processEvents()
 
 timer = QtCore.QTimer()
 timer.timeout.connect(update)
