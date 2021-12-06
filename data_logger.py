@@ -92,20 +92,20 @@ while line <= samples:
 
     #  TODO Add filter to remove invalid data
 
-    data = getData.split(sep=',')
+    data1 = getData.split(sep=',')
 
     # Filter all non digit characters from the serial reading
     i: int = 0
-    for _ in data:
-        data[i] = "".join(filter(str.isdigit, data[i]))
+    for _ in data1:
+        data1[i] = "".join(filter(str.isdigit, data1[i]))
         i += 1
 
     # Just in case something went wrong and the first received data portion is not valid
     try:
-        millis = data[0]
-        red = data[1]
-        ir = data[2]
-        sample = data[3]
+        millis = data1[0]
+        red = data1[1]
+        ir = data1[2]
+        sample = data1[3]
     except IndexError:
         # if an IndexError occurs there was likely a transmission error
         continue

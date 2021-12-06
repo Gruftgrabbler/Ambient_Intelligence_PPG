@@ -40,8 +40,8 @@ while True:
         pass
     try:
 
-        data = Arduino.readline()
-        dataarray = data.decode().rstrip().split(',')
+        data1 = Arduino.readline()
+        dataarray = data1.decode().rstrip().split(',')
         #Arduino.reset_input_buffer()
 
         # current_time = int(round(time.time() * 1000)) - start_time  # time.time() - start_time

@@ -22,11 +22,11 @@ def read_datafile(file_name):
     data = np.loadtxt(file_name, delimiter=',', skiprows=1)
     return data
 
-data = read_datafile(latest_file)
+data1 = read_datafile(latest_file)
 
-time = data[:,0]
-sensor1 = data[:,1]
-sensor2 = data[:,2]
+time = data1[:, 0]
+sensor1 = data1[:, 1]
+sensor2 = data1[:, 2]
 
 fig = plt.figure()
 

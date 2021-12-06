@@ -13,10 +13,10 @@ ser.close()
 ser.open()
 while True:
 
-    data = ser.readline()
-    print(data.decode())
+    data1 = ser.readline()
+    print(data1.decode())
 
-    data_string = data.decode()
+    data_string = data1.decode()
     if len(data_string.split(',')) <3:
         continue
 
