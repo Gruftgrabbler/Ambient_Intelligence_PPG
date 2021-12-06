@@ -35,8 +35,6 @@ def make_dpi_aware():
 make_dpi_aware()
 
 app = QtGui.QApplication([])
-#win = pg.GraphicsLayoutWidget(show=True)
-#win.setWindowTitle('pyqtgraph example: Scrolling Plots')
 
 p=pg.plot()
 p.setWindowTitle('Live Plot from Serial')
