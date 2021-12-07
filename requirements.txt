@@ -1,6 +1,5 @@
-matplotlib==3.5.0
-numpy==1.21.4
-pyserial==3.5
-
+matplotlib~=3.5.0
+numpy~=1.21.4
+pyserial~=3.5
 pyqtgraph~=0.12.3
-PySide2
+PySide2=5.15.2
