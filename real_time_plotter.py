@@ -1,13 +1,22 @@
-import pyqtgraph as pg
-from pyqtgraph.Qt import QtGui, QtCore
-import serial.tools.list_ports
-import platform
 import sys
 import os
 import csv
 import numpy as np
-import codecs
 import time
+
+import serial.tools.list_ports
+import platform
+
+# The imports below are super critical
+from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton
+from pyqtgraph.Qt import QtGui, QtCore
+import pyqtgraph as pg
+
+
+# TODO Can the plotter be implemented in a way so that the number of graphs can be given as program parameter
+#  and for example the name? So we can call the code with something like:
+#  python real_time_plotter.py -n 2 red, ir
+#  That would be amazing!
 
 
 class PortScanner:
@@ -29,7 +38,7 @@ class PortScanner:
                     return port.device
 
             # WINDOWS
-            if platform.system() == "win32":
+            if platform.system() == "Windows":
                 # TODO Implement Windows Auto Connect
                 pass
 
@@ -86,7 +95,7 @@ class SerialConnection:
 
 
 class RealTimePlotter:
-    def __init__(self, serial_conn: serial.Serial, csv_writer: CSVWriter, chunk_size: int = 100, max_chunks=20):
+    def __init__(self, app, serial_conn: serial.Serial, csv_writer: CSVWriter, chunk_size: int = 100, max_chunks=20):
         """
         TODO Write Annotation
         :param serial_conn: Instance of the (PySerial) Serial Connection
@@ -100,8 +109,10 @@ class RealTimePlotter:
         # CSV Writer instance
         self.csv_writer = csv_writer
 
+        # FIXME Not sure if this has to be here
         # Initialize plot window
         self.app = QtGui.QApplication([])
+        # self.app = app
 
         # Plot window configuration
         self.plt = pg.plot()
@@ -119,7 +130,8 @@ class RealTimePlotter:
         # Remove chunks after we have 20
         self.maxChunks = max_chunks
 
-        self.startTime = pg.ptime.time()
+        self.startTime = time.perf_counter()
+        # self.startTime = pg.ptime.time() # FIXME This is deprecated and will be removed soon
         self.ptr = 0
 
         # TODO Ask what is in this 
@@ -144,9 +156,9 @@ class RealTimePlotter:
 
         # TODO READ THE DATA and FILTER invalid data
         # TODO Refactor this in a separate method
-        line = codecs.decode((self.ser.readline()))
-
-        data = line.split(',')
+        get_data = self.ser.readline().decode()
+        print('get_data= ' + get_data)
+        data = get_data.split(',')
 
         # Filter all non digit characters from the serial reading
         i: int = 0
@@ -155,17 +167,22 @@ class RealTimePlotter:
             i += 1
 
         # TODO Make this better
-        millis = int(data[0])
-        sensor_red = int(data[1])
-        sensor_ir = int(data[2])
-
+        try:
+            millis = int(data[0])
+            sensor_red = int(data[1])
+            sensor_ir = int(data[2])
+        except Exception as e:
+            millis = sensor_red = sensor_ir = -1
+            print(e)
+            print(data)
         # TODO REFACTOR EVERYTHING ABOVE
         print('Millis={}\t Red={}\t IR={}'.format(millis, sensor_red, sensor_ir))
 
         # Append the current data to the csv
         self.csv_writer.write_row([millis, sensor_red, sensor_ir])
 
-        now = pg.ptime.time()
+        now = time.perf_counter()
+        # now = pg.ptime.time()
         for c in self.curves_red:
             c.setPos(-(now - self.startTime), 0)
         for c in self.curves_ir:
@@ -173,11 +190,11 @@ class RealTimePlotter:
 
         i = self.ptr % self.chunkSize
         if i == 0:
-            curve_red = self.plt.plot(pen=(255, 0, 0), name="Red sensor_red curve")
-            curve_ir = self.plt.plot(pen=(0, 0, 255), name="Blue sensor_ir curve")
+            self.curve_red = self.plt.plot(pen=(255, 0, 0), name="Red sensor_red curve")
+            self.curve_ir = self.plt.plot(pen=(0, 0, 255), name="Blue sensor_ir curve")
 
-            self.curves_red.append(curve_red)
-            self.curves_ir.append(curve_ir)
+            self.curves_red.append(self.curve_red)
+            self.curves_ir.append(self.curve_ir)
 
             last_red = self.data_red[-1]
             last_ir = self.data_ir[-1]
@@ -191,11 +208,11 @@ class RealTimePlotter:
             data_ir[0] = last_ir
 
             # FIXME removeItem may cause an error in PySide6
-            while len(curve_red) > self.maxChunks:
-                c = curve_red.pop(0)
+            while len(self.curves_red) > self.maxChunks:
+                c = self.curve_red.pop(0)
                 self.plt.removeItem(c)
-            while len(curve_ir) > self.maxChunks:
-                c = curve_ir.pop(0)
+            while len(self.curves_ir) > self.maxChunks:
+                c = self.curve_ir.pop(0)
                 self.plt.removeItem(c)
 
         else:
@@ -208,11 +225,12 @@ class RealTimePlotter:
         self.data_red[i + 1, 1] = int(sensor_red)
         self.data_ir[i + 1, 1] = int(sensor_ir)
 
-        self.curve_red.setData(x=data_red[:i + 2, 0], y=data_red[:i + 2, 1])
-        self.curve_ir.setData(x=data_ir[:i + 2, 0], y=data_ir[:i + 2, 1])
+        self.curve_red.setData(x=self.data_red[:i + 2, 0], y=self.data_red[:i + 2, 1])
+        self.curve_ir.setData(x=self.data_ir[:i + 2, 0], y=self.data_ir[:i + 2, 1])
 
         self.ptr += 1
 
+        # This has to be called at the end of the update function to show the new curves
         self.app.processEvents()
 
 
@@ -233,15 +251,19 @@ def main():
 
     csv_writer = CSVWriter(directory, file_path)
 
-    rtp = RealTimePlotter(serial_conn=ser, csv_writer=csv_writer)
+    # Create GUI Application
+
+    #app = QtGui.QApplication([])
+    #rtp = RealTimePlotter(app=app, serial_conn=ser, csv_writer=csv_writer)
+    rtp = RealTimePlotter(app=None, serial_conn=ser, csv_writer=csv_writer)
 
     timer = QtCore.QTimer()
-    timer.timeout.connect(rtp.update())
+    timer.timeout.connect(rtp.update)
     timer.start(0)
 
     # Start GUI
     if (sys.flags.interactive != 1) or not hasattr(QtCore, 'PYQT_VERSION'):
-        app = QtGui.QApplication([]).instance()
+        app = QtGui.QApplication.instance()
         app.exec()
 
 
