@@ -209,7 +209,7 @@ class RealTimePlotter:
 
             # FIXME removeItem may cause an error in PySide6
             while len(self.curves_red) > self.maxChunks:
-                c = self.curve_red.pop(0)
+                c = self.curves_red.pop(0)
                 self.plt.removeItem(c)
             while len(self.curves_ir) > self.maxChunks:
                 c = self.curve_ir.pop(0)
