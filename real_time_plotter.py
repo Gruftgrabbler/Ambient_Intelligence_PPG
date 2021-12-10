@@ -200,12 +200,12 @@ class RealTimePlotter:
             last_ir = self.data_ir[-1]
 
             # data1 = np.empty((chunkSize + 1, 2))
-            data_red = np.empty((self.chunkSize + 1, 2))
-            data_ir = np.empty((self.chunkSize + 1, 2))
+            self.data_red = np.empty((self.chunkSize + 1, 2))
+            self.data_ir = np.empty((self.chunkSize + 1, 2))
 
             # data1[0] = last1
-            data_red[0] = last_red
-            data_ir[0] = last_ir
+            self.data_red[0] = last_red
+            self.data_ir[0] = last_ir
 
             # FIXME removeItem may cause an error in PySide6
             while len(self.curves_red) > self.maxChunks:
@@ -253,8 +253,8 @@ def main():
 
     # Create GUI Application
 
-    #app = QtGui.QApplication([])
-    #rtp = RealTimePlotter(app=app, serial_conn=ser, csv_writer=csv_writer)
+    # app = QtGui.QApplication([])
+    # rtp = RealTimePlotter(app=app, serial_conn=ser, csv_writer=csv_writer)
     rtp = RealTimePlotter(app=None, serial_conn=ser, csv_writer=csv_writer)
 
     timer = QtCore.QTimer()
