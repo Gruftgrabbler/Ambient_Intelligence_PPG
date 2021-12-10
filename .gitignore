@@ -1,3 +1,5 @@
 /venv
+/.venv
+/.venv_test
 /readings
 *.xml
