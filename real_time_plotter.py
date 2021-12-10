@@ -40,7 +40,9 @@ class PortScanner:
             # WINDOWS
             if platform.system() == "Windows":
                 # TODO Implement Windows Auto Connect
-                pass
+                if "CP210x" in port.description:
+                    print("ESP 32 Detected at {}.".format(port.device))
+                    return port.device
 
         print('No Serial device found!')
         sys.exit()
@@ -157,7 +159,7 @@ class RealTimePlotter:
         # TODO READ THE DATA and FILTER invalid data
         # TODO Refactor this in a separate method
         get_data = self.ser.readline().decode()
-        print('get_data= ' + get_data)
+        # print('get_data= ' + get_data)
         data = get_data.split(',')
 
         # Filter all non digit characters from the serial reading
