@@ -87,7 +87,14 @@ def update():
 
     DataArray = line.split(',')
 
-    if len(DataArray) > 2:          #  TODO Add filter to remove invalid data
+    #  TODO Add filter to remove invalid data
+    # Filter all non digit characters from the serial reading
+    #i: int = 0
+    #for _ in DataArray:
+    #    DataArray[i] = "".join(filter(str.isdigit, DataArray[i]))
+    #    i += 1
+
+    if len(DataArray) > 2:
         millis = int(DataArray[0])
         sensor_red = int(DataArray[1])
         sensor_ir = int(DataArray[2])

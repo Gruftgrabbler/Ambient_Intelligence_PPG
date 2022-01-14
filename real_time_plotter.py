@@ -143,8 +143,8 @@ class RealTimePlotter:
         self.curves_red = []
         self.curves_ir = []
 
-        # curve1 = p.plot(pen=(255, 0, 0), name="Red millis curve")
-        self.curve_red = self.plt.plot(pen=(0, 255, 0), name="Green sensor_red curve")
+        # curve1 = p.plot(pen=(0, 255, 0), name="Green millis curve")
+        self.curve_red = self.plt.plot(pen=(255, 0, 0), name="Red sensor_red curve")
         self.curve_ir = self.plt.plot(pen=(0, 0, 255), name="Blue sensor_ir curve")
 
         # FIXME Should this be really here or in the main()
