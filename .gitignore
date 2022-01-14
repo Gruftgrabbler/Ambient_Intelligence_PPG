@@ -1,6 +1,7 @@
 /venv
 /.venv
 /.venv_test
+/.idea
 /readings
 *.xml
 
