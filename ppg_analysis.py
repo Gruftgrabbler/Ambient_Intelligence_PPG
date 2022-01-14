@@ -44,29 +44,30 @@ high_cut_freq = 5 / nyq
 b, a = signal.butter(num_poles, [low_cut_freq, high_cut_freq], btype='band')
 filtered_red = signal.lfilter(b, a, sensor_red)
 
-#
-
-
 # tests how to set markers in the plot
 markers_on = [60000, 62000]
 
 # Create Plot
-# fig, axs = plt.subplots(2)
+fig, (ax1, ax2, ax3) = plt.subplots(3, 1, sharex=True)
 # ax1 = axs[0]
-fig = plt.figure(111)
+# fig = plt.figure(111)
 
-ax1 = fig.add_subplot(111)
+# ax1 = fig.add_subplot(111)
 
 ax1.set_title("MAX30102 Serial Readings")
-ax1.set_xlabel('Time $(ms)$')
-ax1.set_ylabel('Amplitude')
+ax3.set_xlabel('Time $(ms)$')
+# ax1.set_ylabel('Amplitude')
 
 ax1.plot(time, sensor_red, c='r', label='Red')
-ax1.plot(time, sensor_ir, c='b', label='IR')
-ax1.plot(time, filtered_red, c='g', label='Red Filterd', markevery=markers_on)
+ax1.grid()
 
-leg = ax1.legend()
-plt.grid()
+ax2.plot(time, sensor_ir, c='b', label='IR')
+ax2.grid()
+
+ax3.plot(time, filtered_red, c='g', label='Red Filterd', markevery=markers_on)
+ax3.grid()
+
+# leg = ax1.legend()
 plt.tight_layout()
 
 plt.legend()
