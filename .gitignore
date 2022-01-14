@@ -9,3 +9,5 @@
 *.iml
 .DS_Store
 .idea/
+/.idea/
+/readings
