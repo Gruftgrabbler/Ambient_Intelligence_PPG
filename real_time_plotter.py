@@ -122,7 +122,7 @@ class RealTimePlotter:
         self.plt.setInteractive(True)
         # setting plot window background color to white
         self.plt.setBackground('w')
-        self.plt.showGrid(x=True, y=True, alpha=0.3)
+        self.plt.showGrid(x=True, y=True, alpha=0.6)
         self.plt.setLabel('bottom', 'Time', 's')
         self.plt.setXRange(-10, 0)
 
