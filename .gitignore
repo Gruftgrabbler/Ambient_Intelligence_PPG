@@ -3,3 +3,6 @@
 /.venv_test
 /readings
 *.xml
+
+.DS_Store
+.idea/
