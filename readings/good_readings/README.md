@@ -1,0 +1,1 @@
+data3.csv und data4.csv beinhalten eine einzelne sehr schöne Messung
