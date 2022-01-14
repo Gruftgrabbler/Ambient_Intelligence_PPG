@@ -1,8 +1,10 @@
+
+# Python virtual enviroments
 /venv
 /.venv
-/.venv_test
-/readings
-*.xml
+/.venv_arm
 
+# files
+*.xml
 .DS_Store
 .idea/
