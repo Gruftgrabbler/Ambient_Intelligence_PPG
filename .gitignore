@@ -6,5 +6,6 @@
 
 # files
 *.xml
+*.iml
 .DS_Store
 .idea/
