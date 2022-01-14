@@ -44,18 +44,15 @@ high_cut_freq = 5 / nyq
 b, a = signal.butter(num_poles, [low_cut_freq, high_cut_freq], btype='band')
 filtered_red = signal.lfilter(b, a, sensor_red)
 
-# tests how to set markers in the plot
-markers_on = [60000, 62000]
+# Create Derivation of sgignal
+dx = 50
+gradient_filtered_red = np.gradient(filtered_red, dx)
 
 # Create Plot
-fig, (ax1, ax2, ax3) = plt.subplots(3, 1, sharex=True)
-# ax1 = axs[0]
-# fig = plt.figure(111)
-
-# ax1 = fig.add_subplot(111)
+fig, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1, sharex=True)
 
 ax1.set_title("MAX30102 Serial Readings")
-ax3.set_xlabel('Time $(ms)$')
+# ax3.set_xlabel('Time $(ms)$')
 # ax1.set_ylabel('Amplitude')
 
 ax1.plot(time, sensor_red, c='r', label='Red')
@@ -64,11 +61,13 @@ ax1.grid()
 ax2.plot(time, sensor_ir, c='b', label='IR')
 ax2.grid()
 
-ax3.plot(time, filtered_red, c='g', label='Red Filterd', markevery=markers_on)
+ax3.plot(time, filtered_red, c='g', label='Red Filterd')
 ax3.grid()
 
-# leg = ax1.legend()
-plt.tight_layout()
+ax4.plot(time, gradient_filtered_red, c='y', label='Derivation of Filtered ')
+ax4.grid()
 
+# Display plots
+plt.tight_layout()
 plt.legend()
 plt.show()
