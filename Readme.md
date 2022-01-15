@@ -7,7 +7,8 @@ Bei der venösen Photoplethysmographie wird die Lichtreflexion (Synonym: Licht- 
 
 Der sitzende Patient führt acht Dorsalextensionen in 16 Sekunden im Sprunggelenk durch. Die Ferse ist dabei am Boden abgestützt. Der PPG-Sensor wird ca. 10 cm oberhalb des Malleolus medialis angebracht (Abb. 1). Die Fußbewegung führt zur Kompression der Beinvenen und damit zu einem Bluttransport nach proximal (Muskelpumpe). Das abnehmende Blutvolumen spiegelt sich in der PPG-Kurve durch eine zunehmende Lichtreflexion wider. Nach Beendigung der Fußbewegung fließt das Blut wieder nach distal. Bei insuffizienten Venen geschieht das schneller, als bei suffizienten Venenklappen [Quelle angeben: Phlebologische Funktionsdiagnostik].
 
-<img src="https://github.com/Gruftgrabbler/Ambient_Intelligence_PPG/blob/main/images/Durchf%C3%BChrung%20der%20dPPG-Messung.png" width="842" height="658">
+<img src="https://github.com/Gruftgrabbler/Ambient_Intelligence_PPG/blob/main/images/Durchf%C3%BChrung%20der%20dPPG-Messung.png" width="421" height="329">
+
 
 ## Vorverarbeitung der Daten
 
