@@ -1,3 +1,18 @@
+# Project Based excludes
+.idea/
+/.idea/
+/readings
+
+# Python virtual enviroments
+/venv
+/.venv
+/.venv_arm
+
+# File Types
+*.xml
+*.iml
+.DS_Store
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -132,3 +147,4 @@ dmypy.json
 *.iml
 *.xml
 .idea
+>>>>>>> main

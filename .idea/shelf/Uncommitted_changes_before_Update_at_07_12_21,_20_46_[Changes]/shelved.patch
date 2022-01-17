@@ -1,0 +1,23 @@
+Index: requirements.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>matplotlib==3.5.0\nnumpy==1.21.4\npyserial==3.5\n\npyqtgraph~=0.12.3\nPySide2
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/requirements.txt b/requirements.txt
+--- a/requirements.txt	
++++ b/requirements.txt	
+@@ -1,6 +1,1 @@
+-matplotlib==3.5.0
+-numpy==1.21.4
+-pyserial==3.5
+-
+-pyqtgraph~=0.12.3
+-PySide2
+\ No newline at end of file
++pyserial~=3.5
+\ No newline at end of file
+diff --git a/plot_csv.py b/obsolete/plot_csv.py
+rename from plot_csv.py
+rename to obsolete/plot_csv.py
