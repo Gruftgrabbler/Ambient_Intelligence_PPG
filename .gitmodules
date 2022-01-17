@@ -1,0 +1,3 @@
+[submodule "include"]
+	path = include
+	url = https://github.com/Gruftgrabbler/PyQTGraph_Real_Time_Plotter.git

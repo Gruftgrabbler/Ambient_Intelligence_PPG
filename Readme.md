@@ -1,10 +1,35 @@
-# Ambient Intelligence PPG Mini-Praktika
+# Mini-Praktikum: Venen Funktionsmessung mittels PPG
+Bei der venösen Photoplethysmographie wird die Lichtreflexion (Synonym: Licht- Reflexions-Rheographie, LRR)
+mittels eines PPG-Sensors gemessen. Da Licht von Blut stärker als vom Gewebe absorbiert wird, nimmt
+die Lichtreflexion bei steigendem Blutvolumen im Bein ab. Das PPG Signal spiegelt daher Blutvolumenschwankungen wider.
+Das PPG-Signal gliedert sich in einen gleich bleibenden Anteil durch Lichtabsorption in „undurchblutetem“ Gewebe 
+(ca. 90 %), eine variable Lichtabsorption durch das venöse Blutvolumen (ca. 10 %) und eine periodische arterielle 
+Lichtabsorption (ca. 0,5 %). Mithilfe digitaler Filtertechniken können diese Signale voneinander getrennt werden 
+(digitale Photoplethysmographie, dPPG) [Quelle angeben: Phlebologische Funktionsdiagnostik].
 
-Python Code zum Auslesen des Mikrocontrollers
+## Durchführung der Messung
+
+Der sitzende Patient führt acht Dorsalextensionen in 16 Sekunden im Sprunggelenk durch. Die Ferse ist dabei am Boden
+abgestützt. Der PPG-Sensor wird ca. 10 cm oberhalb des Malleolus medialis angebracht (Abb. 1). Die Fußbewegung führt zur 
+Kompression der Beinvenen und damit zu einem Bluttransport nach proximal (Muskelpumpe). Das abnehmende Blutvolumen
+spiegelt sich in der PPG-Kurve durch eine zunehmende Lichtreflexion wider. Nach Beendigung der Fußbewegung fließt das 
+Blut wieder nach distal. Bei insuffizienten Venen geschieht das schneller, als bei suffizienten Venenklappen 
+[Quelle angeben: Phlebologische Funktionsdiagnostik].
+
+<img src="https://github.com/Gruftgrabbler/Ambient_Intelligence_PPG/blob/main/images/Durchf%C3%BChrung%20der%20dPPG-Messung.png" width="421" height="329">
 
 
-## TODO 
-- [] Add time stems to output data of arduino
-- [] Data should be written to a CSV directly ot prevent excessive memory usage
-- [] Previous written files shouldn't deleted. Instead, use time stamps for file naming differentiation
-  - [] 
+## Vorverarbeitung der Daten
+
+Text
+
+## Datenvorverarbeitung
+
+Text
+
+
+# Pull repository including submodules
+
+```
+ git submodule update --init --recursive
+```
