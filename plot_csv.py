@@ -14,7 +14,7 @@ params = {'mathtext.default': 'regular',
           }        # mathematische Achsenbeschriftungen
 plt.rcParams.update(params)
 
-list_of_files = glob.glob('C:/Users/Philipp Witulla/PycharmProjects/Ambient_Intelligence_PPG/good_readings/*.csv')  # glob.glob('C:/Users/Philipp Witulla/PycharmProjects/Ambient_Intelligence_PPG/readings/*.csv') # * means all if need specific format then *.csv
+list_of_files = glob.glob('C:/Users/Philipp Witulla/PycharmProjects/Ambient_Intelligence_PPG/good_readings/reading_14-01-2022_11-53-52.csv')  # glob.glob('C:/Users/Philipp Witulla/PycharmProjects/Ambient_Intelligence_PPG/readings/*.csv') # * means all if need specific format then *.csv
 latest_file = max(list_of_files, key=os.path.getctime)
 print(latest_file)
 
@@ -29,7 +29,7 @@ time = data1[:, 0]/1000
 sensor_red = data1[:, 1]
 sensor_ir = data1[:, 2]
 
-# normalize time to begin with 0 
+# normalize time to begin with 0
 time = time-time[0]
 
 # Filter data
@@ -48,21 +48,21 @@ filtered_red = signal.sosfiltfilt(sos, sensor_red)
 # Create Derivation of signal
 gradient_red = np.gradient(sensor_red, axis=0)
 
+
 # find baseline
 # find first element in gradient values below -40 to use as starting point of our measurement
 starting_threshold = -50
 timeidx_start = next(idx for idx, value in enumerate(gradient_red) if value < starting_threshold)
 # find more precise element in gradient values below -40 to use as starting point of our measurement
-starting_threshold_precise = min(gradient_red[:timeidx_start-1])
+starting_threshold_precise = min(gradient_red[:timeidx_start-5])
 timeidx_start_precise = next(idx for idx, value in enumerate(gradient_red) if value < starting_threshold)
-
 
 baseline = sensor_red[timeidx_start_precise]
 time_signal_start = time[timeidx_start_precise]
 
-# normalize time to begin with starting point
-time = time-time_signal_start
-time_signal_start = 0
+# normalize time to begin with starting point of measurement
+# time = time-time_signal_start
+# time_signal_start = 0
 
 print("\nBaseline: \t\t\t\t" + str(sensor_red[timeidx_start_precise]))
 # print("\nstarting_threshold_precise: " + str(starting_threshold_precise) + "\ntime_start: " + str(time[timeidx_start]) + "\ttime_start_precise: " + str(time[timeidx_start_precise]))
@@ -70,10 +70,9 @@ print("\nSignal Starting idx: \t" + str(timeidx_start_precise))
 print("Signal Starting Time: \t" + str(time[timeidx_start_precise]))
 
 # find maximum
-idx_last_peak = 1523      #   manually defined # ToDo: get idx with peak detection algorithm
+idx_last_peak = 406  # 406  # 1523      #   manually defined # ToDo: get idx with peak detection algorithm
 time_last_peak = time[idx_last_peak]
 amplitude_last_peak = sensor_red[idx_last_peak]
-
 print("\nlast peak idx: \t\t\t" + str(idx_last_peak))
 print("last peak Time: \t\t" + str(time_last_peak))
 print("last peak Amplitude: \t" + str(amplitude_last_peak))
@@ -82,7 +81,6 @@ print("last peak Amplitude: \t" + str(amplitude_last_peak))
 idx_3s_kurvenabfall = next(idx for idx, value in enumerate(time[idx_last_peak:]) if value > time_last_peak+3) + idx_last_peak
 time_3s_kurvenabfall = time[idx_3s_kurvenabfall]
 amplitude_3s_kurvenabfall = sensor_red[idx_3s_kurvenabfall]
-
 print("\n3s Kurvenabfall idx : \t\t" + str(idx_3s_kurvenabfall))
 print("3s Kurvenabfall Time: \t\t" + str(time_3s_kurvenabfall))
 print("3s Kurvenabfall Amplitude: \t" + str(amplitude_3s_kurvenabfall))
@@ -93,22 +91,20 @@ idx_half_refill = next(idx for idx, value in enumerate(sensor_red[idx_last_peak:
 time_half_refill = time[idx_half_refill]
 amplitude_half_refill = sensor_red[idx_half_refill]
 half_refill_time = time_half_refill - time_last_peak
-
 print("\nHalf-refill time idx: \t\t" + str(idx_half_refill))
 print("Half-refill timepoint: \t\t" + str(time_half_refill))
 print("Half-refill time Amplitude: " + str(amplitude_half_refill))
 
-# find end of Kurvenabfall and venous refill time (= Schnittpunkt von sensor_red mit baseline)
+# find end of Kurvenabfall (= Schnittpunkt von sensor_red mit baseline)
 timeidx_ende_kurvenabfall = next(idx for idx, value in enumerate(sensor_red[idx_last_peak:]) if value < baseline) + idx_last_peak
 time_ende_kurvenabfall = time[timeidx_ende_kurvenabfall]
 amplitude_ende_kurvenabfall = sensor_red[timeidx_ende_kurvenabfall]
-
-venous_refill_time = time_ende_kurvenabfall - time_last_peak
-venous_pump_capacity = (amplitude_last_peak-baseline)/baseline * 100  # Angabe in [%]
-
 print("\nSignal Ending idx: \t\t" + str(timeidx_ende_kurvenabfall))
 print("Signal Ending Time: \t" + str(time[timeidx_ende_kurvenabfall]))
 
+# find venous refill time (= Zeitintervall zwischen Kurvenmaximum nach Belastungsstop und Ende des Kurvenabfalls)
+venous_refill_time = time_ende_kurvenabfall - time_last_peak
+venous_pump_capacity = (amplitude_last_peak-baseline)/baseline * 100  # Angabe in [%]
 print("\nVenous refill time T_0  : " + str(venous_refill_time))
 print("Half-refill time T_50\t: " + str(half_refill_time))
 print("Initial filling time T_i: missing")
@@ -133,10 +129,11 @@ ax1.plot(time, np.full((len(time)), baseline), c='g', label='Red Baseline')
 ax1.plot(time, gradient_red, c='k', label='Red Derivation')
 ax1.plot(time_signal_start, baseline, 'go', label='Measurement start')
 ax1.plot(time_last_peak, amplitude_last_peak, 'yo', label='last peak')
-ax1.plot(time_3s_kurvenabfall, amplitude_3s_kurvenabfall, 'yo', label='3s Kurvenabfall')
-ax1.plot(time_half_refill, amplitude_half_refill, 'yo', label='half-refill point')
+ax1.plot(time_3s_kurvenabfall, amplitude_3s_kurvenabfall, 'bo', label='3s Kurvenabfall')
+ax1.plot(time_half_refill, amplitude_half_refill, 'ko', label='half-refill point')
 ax1.plot(time_ende_kurvenabfall, baseline, 'ro', label='Measurement end')      # replace baseline with amplitude_ende_kurvenabfall?
 ax1.plot(time, sensor_ir, c='b', label='IR')
+ax1.plot(time, filtered_red, c='b', label='filtered_red')
 
 leg = ax1.legend(loc='lower right')
 plt.grid()
