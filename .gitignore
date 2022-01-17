@@ -7,6 +7,7 @@
 /venv
 /.venv
 /.venv_arm
+venv
 
 # File Types
 *.xml
@@ -147,4 +148,3 @@ dmypy.json
 *.iml
 *.xml
 .idea
->>>>>>> main

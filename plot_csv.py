@@ -46,6 +46,7 @@ sos = signal.butter(num_poles, [low_cut_freq, high_cut_freq], btype='band', anal
 filtered_red = signal.sosfiltfilt(sos, sensor_red)
 
 # Create Derivation of signal
+# dx = 50
 gradient_red = np.gradient(sensor_red, axis=0)
 
 
@@ -115,8 +116,8 @@ print("Venous pump function F_0: missing")
 # ToDo: Berechne Gerade durch last_peak und 3s_Kurvenabfall und den Schnittpunkt der Gerade mit der Baseline für initiale Auffüllzeit
 
 
-
-fig = plt.figure()
+# Create Plot
+fig, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1, sharex=True)
 ax1 = fig.add_subplot(111)
 
 ax1.set_title("MAX30102 Serial Readings")
