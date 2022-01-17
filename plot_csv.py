@@ -14,7 +14,7 @@ params = {'mathtext.default': 'regular',
           }        # mathematische Achsenbeschriftungen
 plt.rcParams.update(params)
 
-list_of_files = glob.glob('C:/Users/Philipp Witulla/PycharmProjects/Ambient_Intelligence_PPG/good_readings/*.csv')  # glob.glob('C:/Users/Philipp Witulla/PycharmProjects/Ambient_Intelligence_PPG/readings/*.csv') # * means all if need specific format then *.csv
+list_of_files = glob.glob('C:/Users/Philipp Witulla/PycharmProjects/Ambient_Intelligence_PPG/good_readings/reading_14-01-2022_11-53-52.csv')  # glob.glob('C:/Users/Philipp Witulla/PycharmProjects/Ambient_Intelligence_PPG/readings/*.csv') # * means all if need specific format then *.csv
 latest_file = max(list_of_files, key=os.path.getctime)
 print(latest_file)
 
@@ -70,7 +70,7 @@ print("\nSignal Starting idx: \t" + str(timeidx_start_precise))
 print("Signal Starting Time: \t" + str(time[timeidx_start_precise]))
 
 # find maximum
-idx_last_peak = 1523  # 406  # 1523      #   manually defined # ToDo: get idx with peak detection algorithm
+idx_last_peak = 406  # 406  # 1523      #   manually defined # ToDo: get idx with peak detection algorithm
 time_last_peak = time[idx_last_peak]
 amplitude_last_peak = sensor_red[idx_last_peak]
 print("\nlast peak idx: \t\t\t" + str(idx_last_peak))
@@ -124,15 +124,16 @@ ax1.set_xlabel('Time $(s)$')
 ax1.set_ylabel('Amplitude')
 
 ax1.plot(time, sensor_red, c='r', label='Red')
-#ax1.plot(time, filtered_red, c='y', label='Red Filtered')
+ax1.plot(time, filtered_red, c='y', label='Red Filtered')
 ax1.plot(time, np.full((len(time)), baseline), c='g', label='Red Baseline')
-#ax1.plot(time, gradient_red, c='k', label='Red Derivation')
+ax1.plot(time, gradient_red, c='k', label='Red Derivation')
 ax1.plot(time_signal_start, baseline, 'go', label='Measurement start')
 ax1.plot(time_last_peak, amplitude_last_peak, 'yo', label='last peak')
-ax1.plot(time_3s_kurvenabfall, amplitude_3s_kurvenabfall, 'yo', label='3s Kurvenabfall')
-ax1.plot(time_half_refill, amplitude_half_refill, 'yo', label='half-refill point')
+ax1.plot(time_3s_kurvenabfall, amplitude_3s_kurvenabfall, 'bo', label='3s Kurvenabfall')
+ax1.plot(time_half_refill, amplitude_half_refill, 'ko', label='half-refill point')
 ax1.plot(time_ende_kurvenabfall, baseline, 'ro', label='Measurement end')      # replace baseline with amplitude_ende_kurvenabfall?
-#ax1.plot(time, sensor_ir, c='b', label='IR')
+ax1.plot(time, sensor_ir, c='b', label='IR')
+ax1.plot(time, filtered_red, c='b', label='filtered_red')
 
 leg = ax1.legend(loc='lower right')
 plt.grid()
