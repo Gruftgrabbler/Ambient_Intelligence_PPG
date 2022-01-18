@@ -148,52 +148,61 @@ print("Initial filling time T_i: missing")
 print("Venous pump capacity V_0: " + str(venous_pump_capacity))
 print("Venous pump function F_0: missing")
 
+
 # ToDo: Berechne Gerade durch last_peak und 3s_Kurvenabfall und den Schnittpunkt der Gerade mit der Baseline für initiale Auffüllzeit
 
+def plot_data(plot_ir=False, plot_red_filter=True, plot_derivation=False):
+    # Dynamic Plot Nummering
+    num_subplots = sum([plot_ir, plot_red_filter, plot_derivation]) + 1
+    plot_rows = 2
+    plot_cols = num_subplots // plot_rows + num_subplots % plot_rows
+    plot_index = 1
 
-# Create Plot
-fig, axis = plt.subplots(4, 1, sharex=True)
+    if plot_ir:
+        plt.subplot(plot_rows, plot_cols, plot_index)
+        plt.plot(time, sensor_ir, label='ir readings')
+        plt.grid()
+        plt.legend()
+        plot_index += 1
 
-# ax1.set_title("MAX30102 Serial Readings")
-# ax1.set_xlabel('Time $(s)$')
-# ax1.set_ylabel('Amplitude')
+    # Plot RED Readings
+    ax_red = plt.subplot(plot_rows, plot_cols, plot_index)
+    plt.plot(time, sensor_red, c='r', label='red readings')
+    plt.plot(time, np.full((len(time)), baseline), '--')
+    plt.grid()
+    plt.legend()
+    plot_index += 1
 
-# Plot IR Readings
-axis[0].plot(time, sensor_ir, label='ir readings')
+    # Plot Measurements Points
+    plt.plot(time_signal_start, baseline, 'go', label='Measurement start')
+    plt.plot(time_3s_kurvenabfall, amplitude_3s_kurvenabfall, 'bo', label='3s Kurvenabfall')  # FIXME Last Peak + 3s
+    plt.plot(time[peaks], sensor_red[peaks], 'x', c='b')  # plot peaks
+    plt.plot(time[last_peak], sensor_red[last_peak], 'x', c='g')  # plot last peaks
+    plt.plot(time_abschneidepunkt[:i], line_approx, '--')
 
-# Plot RED Readings
-axis[1].plot(time, sensor_red, c='r', label='red readings')
-axis[1].plot(time, np.full((len(time)), baseline), '--')
+    if plot_red_filter:
+        ax_red_filter = plt.subplot(plot_rows, plot_cols, plot_index, sharex=ax_red)
+        plt.plot(time, filtered_red, c='y', label='Red Filtered')
+        plt.plot(time, np.full((len(time)), baseline), '--')
+        plt.plot(time[peaks], filtered_red[peaks], 'x')  # plot peaks
+        plt.plot(time[last_peak], filtered_red[last_peak], 'x', c='r')  # plot last peaks
+        plt.grid()
+        plt.legend()
+        plot_index += 1
 
-# Plot Measurements Points
-axis[1].plot(time_signal_start, baseline, 'go', label='Measurement start')
-axis[1].plot(time_3s_kurvenabfall, amplitude_3s_kurvenabfall, 'bo', label='3s Kurvenabfall')  # FIXME Last Peak + 3s
-# axis[1].plot(time_half_refill, amplitude_half_refill, 'ko', label='half-refill point')
-# axis[1].plot(time_ende_kurvenabfall, baseline, 'ro', label='Measurement end')  # replace baseline with amplitude_ende_kurvenabfall?
-axis[1].plot(time[peaks], sensor_red[peaks], 'x')  # plot peaks
-axis[1].plot(time[last_peak], sensor_red[last_peak], 'x', c='r')  # plot last peaks
-axis[1].plot(time_abschneidepunkt[:i], line_approx)
+    if plot_derivation:
+        plt.subplot(plot_rows, plot_cols, plot_index)
+        plt.plot(time, gradient_red, c='k', label='Red Derivation')
+        plot_index += 1
 
-# Plot Filtered Red
-axis[2].plot(time, filtered_red, c='y', label='Red Filtered')
-axis[2].plot(time[peaks], filtered_red[peaks], 'x')  # plot peaks
-axis[2].plot(time[last_peak], filtered_red[last_peak], 'x', c='r')  # plot last peaks
-# Plot Gradient Function
-axis[3].plot(time, gradient_red, c='k', label='Red Derivation')
+    plt.tight_layout()
+    plt.show()
 
-for ax in axis:
-    ax.legend(loc='lower right')
-    ax.grid()
 
-plt.tight_layout()  # top=0.96, bottom=0.068, left=0.049, right=0.992, hspace=0.2, wspace=0.2
-# figManager = plt.get_current_fig_manager()
-# figManager.window.showMaximized()
-# fig.subplots_adjust(
-#     top=0.96,
-#     bottom=0.068,
-#     left=0.049,
-#     right=0.992,
-#     hspace=0.2,
-#     wspace=0.2
-# )
-plt.show()
+if __name__ == '__main__':
+    # TODO Implement Argument Parser
+    PLOT_IR = False
+    PLOT_RED_FILTER = True
+    PLOT_DERIVATION = False
+
+    plot_data(PLOT_IR, PLOT_RED_FILTER, PLOT_DERIVATION)
