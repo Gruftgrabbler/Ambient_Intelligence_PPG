@@ -1,26 +1,15 @@
-import matplotlib as mpl
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.cbook as cbook
-import glob
 import os
 
 import scipy.signal
 from scipy import signal
 
-params = {'mathtext.default': 'regular',
-          'axes.titlesize': 16,
-          'axes.labelsize': 14,
-          'font.family': 'sans-serif',
-          'font.sans-serif': 'Tahoma'
-          }  # mathematische Achsenbeschriftungen
-plt.rcParams.update(params)
-
 PATH = 'readings/good_readings/'
 FILE = 'data3.csv'
 latest_file = PATH + FILE
 
-
+# FIXME Keine Hardcoddeten Paths bitte
 # list_of_files = glob.glob( 'C:/Users/Philipp
 # Witulla/PycharmProjects/Ambient_Intelligence_PPG/good_readings/reading_14-01-2022_11-53-52.csv')  # glob.glob(
 # 'C:/Users/Philipp Witulla/PycharmProjects/Ambient_Intelligence_PPG/readings/*.csv') # * means all if need specific
@@ -149,14 +138,21 @@ print("Venous pump capacity V_0: " + str(venous_pump_capacity))
 print("Venous pump function F_0: missing")
 
 
-# ToDo: Berechne Gerade durch last_peak und 3s_Kurvenabfall und den Schnittpunkt der Gerade mit der Baseline für initiale Auffüllzeit
-
 def plot_data(plot_ir=False, plot_red_filter=True, plot_derivation=False):
     # Dynamic Plot Nummering
     num_subplots = sum([plot_ir, plot_red_filter, plot_derivation]) + 1
     plot_rows = 2
     plot_cols = num_subplots // plot_rows + num_subplots % plot_rows
     plot_index = 1
+
+    # FIXME RealLy needed?
+    params = {'mathtext.default': 'regular',
+              'axes.titlesize': 16,
+              'axes.labelsize': 14,
+              'font.family': 'sans-serif',
+              'font.sans-serif': 'Tahoma'
+              }  # mathematische Achsenbeschriftungen
+    plt.rcParams.update(params)
 
     if plot_ir:
         plt.subplot(plot_rows, plot_cols, plot_index)
@@ -201,6 +197,9 @@ def plot_data(plot_ir=False, plot_red_filter=True, plot_derivation=False):
 
 if __name__ == '__main__':
     # TODO Implement Argument Parser
+    #  Argument welche Plots angezeigt werden sollen
+    #  Argument welche Datei ausgelesen werden soll
+
     PLOT_IR = False
     PLOT_RED_FILTER = True
     PLOT_DERIVATION = False
