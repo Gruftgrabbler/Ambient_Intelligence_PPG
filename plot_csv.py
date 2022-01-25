@@ -27,37 +27,48 @@ class PPGCalculator:
 
         self.time = self.time - self.time[0]  # normalize time to begin with 0
 
-    def calc_ppg(self, print_data=True):
+    def calc_ppg(self, print_data=True, normalize_time: str='None'):
         """
         Public function which will be called in order to calc the ppg data from the given signal
         """
-
+        # find baseline, point of time where measurement starts and last peak
         baseline, signal_start = self.calc_baseline(self.sensor_red)
         data_filtered, w, h = self.__filter_data(self.sensor_red)
         last_peak, peaks = self.__find_peaks(data_filtered, baseline)
 
+        # normalize time to begin with starting point or peak of measurement
+        if normalize_time == 'start':
+            self.time = self.time - self.time[signal_start]
+        elif normalize_time == 'peak':
+            self.time = self.time - self.time[last_peak]
+        else:
+            pass
+
         # Find the point on the ppg curve which is 3 sec ahead of the last maximum (required for Inital-Refill-Time)
-        p3 = next(
-            idx for idx, value in enumerate(self.time[last_peak:]) if value > self.time[last_peak] + 3) + last_peak
-        p3_time = self.time[p3]
+        p3_idx = next(idx for idx, value in enumerate(self.time[last_peak:]) if value > self.time[last_peak] + 3) + last_peak
+        p3_time = self.time[p3_idx]
 
-        # approximate line through last peak
-        delta_y = self.sensor_red[p3] - self.sensor_red[last_peak]
-        delta_x = self.time[p3] - self.time[last_peak]
-        line_approx = delta_y / delta_x * (self.time - self.time[last_peak]) + self.sensor_red[last_peak]
-
-        line_approx = line_approx[int(last_peak):]  # remove all entries before last_peak
+        # calculate initial-refill time
+        # approximate line through last peak and p3
+        delta_y = self.sensor_red[p3_idx] - self.sensor_red[last_peak]
+        delta_x = self.time[p3_idx] - self.time[last_peak]
+        line_amplitude = delta_y / delta_x * (self.time - self.time[last_peak]) + self.sensor_red[last_peak]
 
         # TODO REFACTOR THIS SHITTY CODE BELOW
-        baseline_line_intersection_idx = next(idx for idx, value in enumerate(line_approx) if value - baseline < 0)   # schnittpunkt_baseline
-        line_approx = line_approx[:baseline_line_intersection_idx]
+        # remove all entries before last_peak
+        line_amplitude = line_amplitude[int(last_peak):]
+        # find first point of intersection between the approximated line and baseline
+        baseline_line_intersection_idx = next(idx for idx, value in enumerate(line_amplitude) if value - baseline < 0)   # schnittpunkt zwischen line und baseline
+        # remove all entries after intersection
+        line_amplitude = line_amplitude[:baseline_line_intersection_idx]
         line_time = self.time[int(last_peak):last_peak+baseline_line_intersection_idx]
+        line = [line_time, line_amplitude]
+        # calculate initial-refill time
+        initial_filling_time = line_time[-1] - line_time[0]
 
-        line = [line_time, line_approx]
-
+        # calculate half-refill time
         threshold_half_refill = baseline + (self.sensor_red[last_peak] - baseline) / 2
-        idx_half_refill = next(
-            idx for idx, value in enumerate(self.sensor_red[last_peak:]) if value < threshold_half_refill) + last_peak
+        idx_half_refill = next(idx for idx, value in enumerate(self.sensor_red[last_peak:]) if value < threshold_half_refill) + last_peak
 
         time_half_refill = self.time[idx_half_refill]
         amplitude_half_refill = self.sensor_red[idx_half_refill]
@@ -76,7 +87,9 @@ class PPGCalculator:
         x = np.array(self.time[last_peak:timeidx_end_intersection])
         y = (np.array(self.sensor_red[last_peak:timeidx_end_intersection]) - baseline) / baseline * 100
         venous_pump_function = scipy.integrate.trapz(y,x)
+        # ToDo: delete after peer-review
         # plt.plot(x,y)
+        # plt.grid()
         # plt.show()
 
         if print_data:
@@ -89,9 +102,9 @@ class PPGCalculator:
             print("Last peak Time: \t\t" + str(self.time[last_peak]))
             print("Last peak Amplitude: \t" + str(data_filtered[last_peak]))
 
-            print("\n3s Kurvenabfall idx : \t\t" + str(p3))
+            print("\n3s Kurvenabfall idx : \t\t" + str(p3_idx))
             print("3s Kurvenabfall Time: \t\t" + str(p3_time))
-            print("3s Kurvenabfall Amplitude: \t" + str(self.sensor_red[p3]))
+            print("3s Kurvenabfall Amplitude: \t" + str(self.sensor_red[p3_idx]))
 
             print("\nSignal Ending idx: \t\t" + str(timeidx_end_intersection))
             print("Signal Ending Time: \t" + str(self.time[timeidx_end_intersection]))
@@ -115,9 +128,9 @@ class PPGCalculator:
                             ['Last peak Time',                self.time[last_peak]],
                             ['Last peak Amplitude',           data_filtered[last_peak]],
                             ['', ],
-                            ['3s Kurvenabfall idx',           p3],
+                            ['3s Kurvenabfall idx',           p3_idx],
                             ['3s Kurvenabfall Time',          p3_time],
-                            ['3s Kurvenabfall Amplitude',     self.sensor_red[p3]],
+                            ['3s Kurvenabfall Amplitude',     self.sensor_red[p3_idx]],
                             ['', ],
                             ['Signal Ending idx',             timeidx_end_intersection],
                             ['Signal Ending Time',            self.time[timeidx_end_intersection]],
@@ -128,12 +141,12 @@ class PPGCalculator:
                             ['', ],
                             ['Venous refill time T_0 (s)',    venous_refill_time],
                             ['Half-refill time T_50 (s)',     half_refill_time],
-                            ['Initial filling time T_i (s)',  ],
+                            ['Initial filling time T_i (s)',  initial_filling_time],
                             ['Venous pump capacity V_0 (%)',  venous_pump_capacity],
                             ['Venous pump function F_0 (%s)', venous_pump_function],
                             ], headers=['Parameter', 'Value'], tablefmt="grid", floatfmt=".3f"))
 
-        self.plot_data(baseline, last_peak, peaks, signal_start, p3, line, data_filtered, None)
+        self.plot_data(baseline, last_peak, peaks, signal_start, p3_idx, line, data_filtered, None)
 
         return 0
 
@@ -164,16 +177,13 @@ class PPGCalculator:
     def calc_baseline(self, sensor_data, print_data=True):
         starting_threshold = -50
         gradient = self.__calc_gradient(self, sensor_data)
-        timeidx_start = next(idx for idx, value in enumerate(gradient) if value < starting_threshold)
-        # find more precise element in gradient values below -40 to use as starting point of our measurement
-        starting_threshold_precise = min(gradient[:timeidx_start - 5])
+        # ToDo: review before code deletion: if more precise location of baseline is necessary
+        # timeidx_start = next(idx for idx, value in enumerate(gradient) if value < starting_threshold)
+        # # find more precise element in gradient values below -40 to use as starting point of our measurement
+        # starting_threshold_precise = min(gradient[:timeidx_start - 5])
         signal_start = int(next(idx for idx, value in enumerate(gradient) if value < starting_threshold))
 
         baseline = sensor_data[signal_start]
-        # time_signal_start = self.time[timeidx_start_precise]
-        # normalize time to begin with starting point of measurement
-        # time = time-time_signal_start
-        # time_signal_start = 0
 
         return baseline, signal_start
 
