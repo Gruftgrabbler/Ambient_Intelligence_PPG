@@ -50,14 +50,9 @@ class PPGCalculator:
         line_approx = line_approx[int(last_peak):]  # remove all entries before last_peak
 
         # TODO REFACTOR THIS SHITTY CODE BELOW
-        # schnittpunkt_baseline = next(idx for idx, value in enumerate(line_approx) if value == baseline)
-        line_end_time = 0
-        for _ in line_approx:
-            if line_approx[line_end_time] <= baseline:
-                break
-            line_end_time += 1
-        line_approx = line_approx[:line_end_time]
-        line_time = self.time[int(last_peak):last_peak+line_end_time]
+        baseline_line_intersection_idx = next(idx for idx, value in enumerate(line_approx) if value - baseline < 0)   # schnittpunkt_baseline
+        line_approx = line_approx[:baseline_line_intersection_idx]
+        line_time = self.time[int(last_peak):last_peak+baseline_line_intersection_idx]
 
         line = [line_time, line_approx]
 
@@ -78,18 +73,12 @@ class PPGCalculator:
         venous_refill_time = time_end_intersection - self.time[last_peak]
         venous_pump_capacity = (self.sensor_red[last_peak] - baseline) / baseline * 100  # Angabe in [%]
 
-        #val, err = self.calc_venous_pump_function()
-
         # calc_venous_pump_function
-        area = (np.array(self.sensor_red[last_peak:timeidx_end_intersection]) - baseline) / baseline * 100
-        val = scipy.integrate.simps(area)
-        print(val)
-
         x = np.array(self.time[last_peak:timeidx_end_intersection])
         y = (np.array(self.sensor_red[last_peak:timeidx_end_intersection]) - baseline) / baseline * 100
         venous_pump_function = scipy.integrate.trapz(y,x)
-        plt.plot(x,y)
-        plt.show()
+        # plt.plot(x,y)
+        # plt.show()
 
         if print_data:
             '''
@@ -188,11 +177,6 @@ class PPGCalculator:
         # time_signal_start = 0
 
         return baseline, signal_start
-
-    def calc_venous_pump_function(self):
-        area = np.array(sensor_red[last_peak:timeidx_end_intersection]) - np.array(baseline[last_peak:timeidx_end_intersection])
-        val, err = quadpy.quad(area, 0.0, 6.0)
-        return val, err
 
 
     # TODO Bennene die Variable kurvenabfall um
