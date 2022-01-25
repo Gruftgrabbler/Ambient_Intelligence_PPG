@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.signal
+from tabulate import tabulate
 
 
 # TODO Der Algorithmus in dieser Form ist nur in der Lage die Berechnungen auf Daten auszuführen die nur eine einzelne
@@ -66,13 +67,13 @@ class PPGCalculator:
         amplitude_half_refill = self.sensor_red[idx_half_refill]
         half_refill_time = time_half_refill - self.time[last_peak]
 
-        # find end of Kurvenabfall (= Schnittpunkt von sensor_red mit baseline)
-        timeidx_ende_kurvenabfall = next(
+        # find first point of intersection between measured signal (sensor_red) and baseline after decline of the curve
+        timeidx_end_intersection = next(
             idx for idx, value in enumerate(self.sensor_red[last_peak:]) if value < baseline) + last_peak
-        time_ende_kurvenabfall = self.time[timeidx_ende_kurvenabfall]
-        amplitude_ende_kurvenabfall = self.sensor_red[timeidx_ende_kurvenabfall]
+        time_end_intersection = self.time[timeidx_end_intersection]
+        amplitude_end_intersection = self.sensor_red[timeidx_end_intersection]
 
-        venous_refill_time = time_ende_kurvenabfall - self.time[last_peak]
+        venous_refill_time = time_end_intersection - self.time[last_peak]
         venous_pump_capacity = (self.sensor_red[last_peak] - baseline) / baseline * 100  # Angabe in [%]
 
         if print_data:
@@ -92,6 +93,26 @@ class PPGCalculator:
             print("Initial filling time T_i: missing")
             print("Venous pump capacity V_0: " + str(venous_pump_capacity))
             print("Venous pump function F_0: missing")
+
+            """
+            print(tabulate([['Half-refill time idx',          idx_half_refill],
+                            ['Half-refill timepoint',         time_half_refill],
+                            ['Half-refill time Amplitude',    amplitude_half_refill],
+                            ['', ],
+                            ['3s Kurvenabfall idx',           p3],
+                            ['3s Kurvenabfall Time',          p3_time],
+                            ['3s Kurvenabfall Amplitude',     self.sensor_red[p3]],
+                            ['', ],
+                            ['Signal Ending idx',             timeidx_end_intersection],
+                            ['Signal Ending Time',            self.time[timeidx_end_intersection]],
+                            ['', ],
+                            ['Venous refill time T_0 (s)',    venous_refill_time],
+                            ['Half-refill time T_50 (s)',     half_refill_time],
+                            ['Initial filling time T_i (s)',  'missing'],
+                            ['Venous pump capacity V_0 (%)',  venous_pump_capacity],
+                            ['Venous pump function F_0 (%s)', 'missing'],
+                            ], headers=['Parameter', 'Value']))
+            """
 
         self.plot_data(baseline, last_peak, peaks, signal_start, p3, line, data_filtered, None)
 
