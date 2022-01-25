@@ -23,4 +23,3 @@ scipy~=1.8.0rc2
 heartpy~=1.2.7
 setuptools~=57.0.0
 tabulate==0.8.9
-quadpy==0.16.10

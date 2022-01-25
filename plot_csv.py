@@ -2,7 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.signal
 from tabulate import tabulate
-import quadpy
 from scipy.interpolate import InterpolatedUnivariateSpline
 
 
