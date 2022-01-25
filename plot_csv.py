@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.signal
 from tabulate import tabulate
+import quadpy
+from scipy.interpolate import InterpolatedUnivariateSpline
 
 
 # TODO Der Algorithmus in dieser Form ist nur in der Lage die Berechnungen auf Daten auszuführen die nur eine einzelne
@@ -76,28 +78,54 @@ class PPGCalculator:
         venous_refill_time = time_end_intersection - self.time[last_peak]
         venous_pump_capacity = (self.sensor_red[last_peak] - baseline) / baseline * 100  # Angabe in [%]
 
+        #val, err = self.calc_venous_pump_function()
+
+        # calc_venous_pump_function
+        area = (np.array(self.sensor_red[last_peak:timeidx_end_intersection]) - baseline) / baseline * 100
+        val = scipy.integrate.simps(area)
+        print(val)
+
+        x = np.array(self.time[last_peak:timeidx_end_intersection])
+        y = (np.array(self.sensor_red[last_peak:timeidx_end_intersection]) - baseline) / baseline * 100
+        venous_pump_function = scipy.integrate.trapz(y,x)
+        plt.plot(x,y)
+        plt.show()
+
         if print_data:
-            print("\nHalf-refill time idx: \t\t" + str(idx_half_refill))
-            print("Half-refill timepoint: \t\t" + str(time_half_refill))
-            print("Half-refill time Amplitude: " + str(amplitude_half_refill))
+            '''
+            print("\nBaseline: \t\t\t\t" + str(self.sensor_red[signal_start]))
+            print("Signal Starting idx: \t" + str(signal_start))
+            print("Signal Starting Time: \t" + str(self.time[signal_start]))
+
+            print("\nLast peak idx: \t\t\t" + str(last_peak))
+            print("Last peak Time: \t\t" + str(self.time[last_peak]))
+            print("Last peak Amplitude: \t" + str(data_filtered[last_peak]))
 
             print("\n3s Kurvenabfall idx : \t\t" + str(p3))
             print("3s Kurvenabfall Time: \t\t" + str(p3_time))
             print("3s Kurvenabfall Amplitude: \t" + str(self.sensor_red[p3]))
 
-            print("\nSignal Ending idx: \t\t" + str(timeidx_ende_kurvenabfall))
-            print("Signal Ending Time: \t" + str(self.time[timeidx_ende_kurvenabfall]))
+            print("\nSignal Ending idx: \t\t" + str(timeidx_end_intersection))
+            print("Signal Ending Time: \t" + str(self.time[timeidx_end_intersection]))
+
+            print("\nHalf-refill Time idx: \t\t" + str(idx_half_refill))
+            print("Half-refill Time: \t\t" + str(time_half_refill))
+            print("Half-refill Time Amplitude: " + str(amplitude_half_refill))
 
             print("\nVenous refill time T_0  : " + str(venous_refill_time))
             print("Half-refill time T_50\t: " + str(half_refill_time))
             print("Initial filling time T_i: missing")
             print("Venous pump capacity V_0: " + str(venous_pump_capacity))
-            print("Venous pump function F_0: missing")
+            print("Venous pump function F_0: str(venous_pump_function)")
+            '''
 
-            """
-            print(tabulate([['Half-refill time idx',          idx_half_refill],
-                            ['Half-refill timepoint',         time_half_refill],
-                            ['Half-refill time Amplitude',    amplitude_half_refill],
+            print(tabulate([['Baseline',                      baseline],
+                            ['Signal Starting idx',           signal_start],
+                            ['Signal Starting Time',          self.time[signal_start]],
+                            ['', ],
+                            ['Last peak idx',                 last_peak],
+                            ['Last peak Time',                self.time[last_peak]],
+                            ['Last peak Amplitude',           data_filtered[last_peak]],
                             ['', ],
                             ['3s Kurvenabfall idx',           p3],
                             ['3s Kurvenabfall Time',          p3_time],
@@ -106,13 +134,16 @@ class PPGCalculator:
                             ['Signal Ending idx',             timeidx_end_intersection],
                             ['Signal Ending Time',            self.time[timeidx_end_intersection]],
                             ['', ],
+                            ['Half-refill time idx',          idx_half_refill],
+                            ['Half-refill timepoint',         time_half_refill],
+                            ['Half-refill time Amplitude',    amplitude_half_refill],
+                            ['', ],
                             ['Venous refill time T_0 (s)',    venous_refill_time],
                             ['Half-refill time T_50 (s)',     half_refill_time],
-                            ['Initial filling time T_i (s)',  'missing'],
+                            ['Initial filling time T_i (s)',  ],
                             ['Venous pump capacity V_0 (%)',  venous_pump_capacity],
-                            ['Venous pump function F_0 (%s)', 'missing'],
-                            ], headers=['Parameter', 'Value']))
-            """
+                            ['Venous pump function F_0 (%s)', venous_pump_function],
+                            ], headers=['Parameter', 'Value'], tablefmt="grid", floatfmt=".3f"))
 
         self.plot_data(baseline, last_peak, peaks, signal_start, p3, line, data_filtered, None)
 
@@ -136,12 +167,11 @@ class PPGCalculator:
         last_peak = peaks[-1]  # save the last peak in a special variable
         peaks = peaks[:-1]  # remove last peak from the peaks list
 
-        if print_data:
-            print("\nLast peak idx: \t\t\t" + str(last_peak))
-            print("Last peak Time: \t\t" + str(self.time[last_peak]))
-            print("Last peak Amplitude: \t" + str(signal[last_peak]))
-
         return int(last_peak), peaks
+
+    # ToDo
+    def calc_initial_refill_time(self):
+        pass
 
     def calc_baseline(self, sensor_data, print_data=True):
         starting_threshold = -50
@@ -157,12 +187,13 @@ class PPGCalculator:
         # time = time-time_signal_start
         # time_signal_start = 0
 
-        if print_data:
-            print("\nBaseline: \t\t\t\t" + str(sensor_data[signal_start]))
-            print("\nSignal Starting idx: \t" + str(signal_start))
-            print("Signal Starting Time: \t" + str(self.time[signal_start]))
-
         return baseline, signal_start
+
+    def calc_venous_pump_function(self):
+        area = np.array(sensor_red[last_peak:timeidx_end_intersection]) - np.array(baseline[last_peak:timeidx_end_intersection])
+        val, err = quadpy.quad(area, 0.0, 6.0)
+        return val, err
+
 
     # TODO Bennene die Variable kurvenabfall um
     def plot_data(self, baseline: int, last_peak: int, peaks: int, signal_start: int, kurvenabfall: int,
