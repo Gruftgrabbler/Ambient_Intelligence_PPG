@@ -48,13 +48,34 @@ Der MAX30102 PPG-Sensor enthält zwei Leuchtdioden (LEDs), eine infrarote LED (S
 | pulseWidth    |       411      | Valid options: 69, 118, 215, 411. The longer the pulse width, the wider the detection range. Default to be Max range               |
 | adcRange      |      2048      | ADC Measurement Range, default 4096 (nA)，15.63(pA) per LSB at 18 bits resolution                                                  |
 
-Zur Aufnahme und Speicherung der seriell übertragenen Messwerte durch den ESP32 wurde ein Python-Skript geschrieben. Der Python-Code erfasst die Daten und stellt diese in einem Echtzeit-Plotter graphisch dar. Zeitgleich werden die Messwerte direkt nach dem Empfang in einer .csv-Datei gespeichert, was als Grundlage der nachfolgenden Analyse dienst. 
+Zur Aufnahme und Speicherung der seriell übertragenen Messwerte durch den ESP32 wurde ein Python-Skript geschrieben (real_time_plotter.py). Der Python-Code erfasst die Daten und stellt diese in einem Echtzeit-Plotter graphisch dar. Zeitgleich werden die Messwerte direkt nach dem Empfang in einer .csv-Datei gespeichert, was als Grundlage der nachfolgenden Analyse dienst. 
 Der Grund für die umgehende Datensicherung liegt in der hohen Eingangsgeschwindigkeit der Daten, welche mit einer Aufnahmefrequenz von 20 Hz eintreffen. Um die Datenverarbeitung zwischen den seriellen Erfassungen auf ein Minimum zu reduzieren, findet die weitere Datenverarbeitung nicht in Echtzeit, sondern im Anschluss an die Messung anhand der aufgezeichneten Messwerte in der csv-Datei statt.
 
 
 ## Auswertung der Messergebnisse 
 
+Für den Import der Messdaten aus der resultierenden CSV-Datei und die anschließende Datenverarbeitung zur Analyse wurde ein zweites Skript geschrieben (plot_csv.py). Der erste Schritt bei der Verarbeitung der PPG-Daten besteht darin, die Basislinie unserer Messdaten zu ermitteln. Hierfür betrachten wir die Ableitung erster Ordnung und ermitteln den Startzeitpunkt der Fußbewegungen anhand des Kurvenanstiegs über einen experimentell ermittelten Grenzwert hinaus. Der letzte Zeitpunkt vor dem Überschreiten des Grenzwerts wird als Startzeitpunkt der Messdurchführung definiert, die zugehörige Signalamplitude als Basislinie.
+
+Im nächsten Schritt werden die Daten durch einen Tiefpass 4. Ordnung gefiltert. Die untere Grenzfrequenz wurde auf 3 Hz gewählt, um die Gleichstromkomponente der Daten zu entfernen. Anschließend werden die Zeitpunkte und Amplituden der lokalen Maxima mit der in Scipy integrierten Funktion *findpeaks* ermittelt. Für die weitere Analyse ist nur der zuletzt aufgetretene Höhepunkt nach Belastungsstop <img src="https://render.githubusercontent.com/render/math?math=R_{max}"> von Relevanz. In Abbildung 3 ist eine Messdurchführung mit relevanten Punkten für die weitere Analyse dargestellt.
+
 <img src="https://github.com/Gruftgrabbler/Ambient_Intelligence_PPG/blob/main/images/Messergebnis_normalized.png">
+
+**Abbildung 3:** Messdurchführung mit relevanten Punkten
+
+
+
+Aus dem Zeitintervall zwischen <img src="https://render.githubusercontent.com/render/math?math=R_{max}"> und dem Ende des Kurvenabfalls am Schnittpunkt mit der Basislinie ergibt sich die venöse Auffüllzeit.
+
+Aus dem Zeitintervall zwischen <img src="https://render.githubusercontent.com/render/math?math=R_{max}"> und dem Unterschreiten von 50% der Amplitude von <img src="https://render.githubusercontent.com/render/math?math=R_{max}"> ergibt sich die venöse Halbwertszeit.
+
+Eine Gerade zwischen <img src="https://render.githubusercontent.com/render/math?math=R_{max}"> und dem Kurvenpunkt nach drei Sekunden Abfall wird bis zur Basislinie verlängert und ergibt dort im Schnittpunkt die initiale Auffüllzeit.
+
+Die venöse Pumpleistung folgt aus der Signalamplitude, nachdem es mit der Amplitude der Basislinie normiert wurde:
+<img src="https://render.githubusercontent.com/render/math?math=V_0 = \frac{R_{max} - Basislinie}{Basislinie} \cdot 100">
+
+Die venöse Pumparbeit wird durch Integration der venösen Pumpleistung über das Zeitintervall zwischen <img src="https://render.githubusercontent.com/render/math?math=R_{max}"> und dem Ende des Kurvenabfalls am Schnittpunkt mit der Basislinie ermittelt.
+
+In Tabelle 2 sind die ermittelten quantitativen Parameter für das Messsignal in Abbildung 3 gelistet.
 
 **Tabelle 2:** Ermittelte Parameter aus der automatisierten Analyse der aufgezeichneten Messwerte 
 | Quantitative Parameter        | Messwerte |
