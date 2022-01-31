@@ -9,32 +9,57 @@ Lichtabsorption (ca. 0,5 %). Mithilfe digitaler Filtertechniken können diese Si
 
 ## Durchführung der Messung
 
-Der sitzende Patient führt acht Dorsalextensionen in 16 Sekunden im Sprunggelenk durch. Die Ferse ist dabei am Boden
+Der sitzende Patient führt acht Dorsalextensionen im Sprunggelenk innerhalb von 16 Sekunden im Metronomrhythmus durch. Die Ferse ist dabei am Boden
 abgestützt. Der PPG-Sensor wird mithilfe des 3D gedruckten Gehäuses ca. 10 cm oberhalb des Malleolus medialis angebracht (Abb. 1). 
 
-<img src="https://github.com/Gruftgrabbler/Ambient_Intelligence_PPG/blob/main/images/Durchf%C3%BChrung%20der%20dPPG-Messung.png" width="421" height="329">
+<img src="https://github.com/Gruftgrabbler/Ambient_Intelligence_PPG/blob/main/images/Durchf%C3%BChrung%20der%20dPPG-Messung.png" width="421" height="329">[[2]](https://www.researchgate.net/publication/6482990_Photoplethysmography_and_its_application_in_clinical_physiological_measurement)
 
 Die Fußbewegung führt zur Kompression der Beinvenen und damit zu einem Bluttransport nach proximal (Muskelpumpe). Das abnehmende Blutvolumen
 spiegelt sich in der LRR-Kurve durch eine zunehmende Lichtreflexion wider. Nach Beendigung der Fußbewegung fließt das 
 Blut wieder nach distal. Bei insuffizienten Venen geschieht das schneller, als bei suffizienten Venenklappen 
 [[1]](https://docplayer.org/21805396-Phlebologische-funktionsdiagnostik.html).
 
-![Mustermessung](https://media.springernature.com/original/springer-static/image/chp%3A10.1007%2F978-3-642-23804-8_36/MediaObjects/67823_2_De_36_Fig4_HTML.gif)[[2]](https://link.springer.com/chapter/10.1007/978-3-642-23804-8_36)
+![Mustermessung](https://media.springernature.com/original/springer-static/image/chp%3A10.1007%2F978-3-642-23804-8_36/MediaObjects/67823_2_De_36_Fig4_HTML.gif)[[3]](https://link.springer.com/chapter/10.1007/978-3-642-23804-8_36)
 
 Der Messzyklus läuft vollautomatisch ab, die Messsignale werden ebenfalls automatisch ausgewertet.
 Erfasst werden folgende Parameter zur unterstützenden Diagnostik der Venenfunktion:
 * Venöse Wiederauffüllzeit <img src="https://render.githubusercontent.com/render/math?math=T_0">
-* Venöse Halbwertszeit <img src="https://render.githubusercontent.com/render/math?math=T_{1/2}">
+* Venöse Halbwertszeit <img src="https://render.githubusercontent.com/render/math?math=T_{50}">
 * Initiale Auffüllzeit <img src="https://render.githubusercontent.com/render/math?math=T_i">
-* venöse Pumpleistung <img src="https://render.githubusercontent.com/render/math?math=V_0">
-* venöse Pumparbeit <img src="https://render.githubusercontent.com/render/math?math=F_0">
+* Venöse Pumpleistung <img src="https://render.githubusercontent.com/render/math?math=V_0">
+* Venöse Pumparbeit <img src="https://render.githubusercontent.com/render/math?math=F_0">
 
 
 ## Vorverarbeitung der Daten
 
-Zur Aufnahme und Speicherung der seriell übertragenen Messwerte durch den ESP32 wurde ein Python-Skript geschrieben. Der Python-Code erfasst die Daten und stellt diese in einem Echtzeit-Plotter graphisch dar. Zeitgleich werden die Messwerte direkt nach dem Empfang in einer .csv-Datei gespeichert zur späteren Analyse. Der Grund, warum wir sie sofort speichern, ist, dass die Daten mit so hoher Geschwindigkeit eintreffen, dass wir die Datenverarbeitung zwischen den seriellen Erfassungen auf ein Minimum reduzieren wollen.
+Der MAX30102 PPG-Sensor enthält zwei Leuchtdioden (LEDs), eine infrarote LED (Spitzenwellenlänge 880 nm) und eine rote LED (Spitzenwellenlänge 660 nm); dazu kommt eine Photodiode, die spezifisch für Wellenlängen zwischen 600 und 900 nm ausgelegt ist. Im MAX30102 Sensor ist ein integrierter Temperatursensor zur Messung von Temperaturschwankungen, ein Analog-Digital Wandler (ADC) und eine I2C-Schnittstelle. Durch die Integration des ADC und der I2C-Schnittstelle in den Sensor selbst werden Rauschen und Artefakte, die zwischen der Fotodiode und dem ADC entstehen, auf ein Minimum reduziert. Außerdem werden die vom Sensor gemessenen Werte mit einer Prüfsumme übertragen, so dass die Gültigkeit der Daten die Gültigkeit der Daten beim Empfang durch den unterstützenden Mikrocontroller überprüft wird. Die Firmware für den Mikrocontroller wurde so entwickelt, dass der I2C-Multiplexer durch die einzelnen I2C-Kanäle schaltet und den Wert jedes Lese- und Schreibzeigers des PPG-Sensors liest. Eine Diskrepanz zwischen den Werten des Schreib- und Lesezeigers zeigt an, dass neue PPG-Daten im Puffer verfügbar sind. Die Firmware liest alle verfügbaren Daten im Puffer, bis die Lese- und Schreibzeiger wieder übereinstimmen, bevor sie zum Abrufen der Lese- und Schreibzeigerwerte des nächsten Sensors weitergeht. Die Daten werden sofort über eine serielle Verbindung vom ESP32 an den angeschlossenen PC übertragen. Die PPG-Sensorplatinen wurden auf eine Abtastrate von 20 Hz konfiguriert, wobei die in Tabelle 1 aufgeführten Einstellungen verwendet wurden.
+
+**Tabelle 1:** Empfohlene Einstellungen zur Konfiguration des MAX30102-Sensors
+|    Setting    |      Value     | Description                                                                                                                        |
+|---------------|:--------------:|------------------------------------------------------------------------------------------------------------------------------------|
+| ledBrightness | 0x66 (= 20 mA) | Wertebereich (Hex-Dec=LED-Strom): 0-0=0mA (Off) to 0xFF-255=50mA <br /> 0x33-51=10mA. 0x66-102=20mA. 0x99-153=30mA. 0xCC-204=40mA  |
+| sampleAverage |        4       | Averages multiple samples then draw once, reduce data throughput, default 4 samples average                                        |
+| ledMode       |        3       | 1 = Red only, 2 = Red + IR, 3 = Red + IR + Green                                                                                   |
+| sampleRate    |      1000      | Valid options: 50, 100, 200, 400, 800, 1000, 1600, 3200                                                                            |
+| pulseWidth    |       411      | Valid options: 69, 118, 215, 411. The longer the pulse width, the wider the detection range. Default to be Max range               |
+| adcRange      |      2048      | ADC Measurement Range, default 4096 (nA)，15.63(pA) per LSB at 18 bits resolution                                                  |
+
+Zur Aufnahme und Speicherung der seriell übertragenen Messwerte durch den ESP32 wurde ein Python-Skript geschrieben. Der Python-Code erfasst die Daten und stellt diese in einem Echtzeit-Plotter graphisch dar. Zeitgleich werden die Messwerte direkt nach dem Empfang in einer .csv-Datei gespeichert, was als Grundlage der nachfolgenden Analyse dienst. 
+Der Grund für die umgehende Datensicherung liegt in der hohen Eingangsgeschwindigkeit der Daten, welche mit einer Aufnahmefrequenz von 20 Hz eintreffen. Um die Datenverarbeitung zwischen den seriellen Erfassungen auf ein Minimum zu reduzieren, findet die weitere Datenverarbeitung nicht in Echtzeit, sondern im Anschluss an die Messung anhand der aufgezeichneten Messwerte in der csv-Datei statt.
+
 
 ## Auswertung der Messergebnisse 
+
+<img src="https://github.com/Gruftgrabbler/Ambient_Intelligence_PPG/blob/main/images/Durchf%C3%BChrung%20der%20dPPG-Messung.png" width="421" height="329">
+
+**Tabelle 2:** Ermittelte Parameter aus der automatisierten Analyse der aufgezeichneten Messwerte 
+| Quantitative Parameter        | Messwerte |
+|-------------------------------|:---------:|
+| Venöse Auffüllzeit T_0 (s)    |    83.157 |
+| Venöse Halbwertszeit T_50 (s) |    14.098 |
+| Initiale Auffüllzeit T_i (s)  |    22.357 |
+| Venöse Pumpleistung V_0 (%)   |    12.203 |
+| Venöse Pumparbeit F_0 (%s)    |   311.642 |
 
 # Setup
 
