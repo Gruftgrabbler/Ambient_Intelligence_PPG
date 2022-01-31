@@ -10,16 +10,20 @@ Lichtabsorption (ca. 0,5 %). Mithilfe digitaler Filtertechniken können diese Si
 ## Durchführung der Messung
 
 Der sitzende Patient führt acht Dorsalextensionen im Sprunggelenk innerhalb von 16 Sekunden im Metronomrhythmus durch. Die Ferse ist dabei am Boden
-abgestützt. Der PPG-Sensor wird mithilfe des 3D gedruckten Gehäuses ca. 10 cm oberhalb des Malleolus medialis angebracht (Abb. 1). 
+abgestützt. Der PPG-Sensor wird mithilfe des 3D gedruckten Gehäuses ca. 10 cm oberhalb des Malleolus medialis angebracht (Abbildung 1). 
 
-<img src="https://github.com/Gruftgrabbler/Ambient_Intelligence_PPG/blob/main/images/Durchf%C3%BChrung%20der%20dPPG-Messung.png" width="421" height="329">[[2]](https://www.researchgate.net/publication/6482990_Photoplethysmography_and_its_application_in_clinical_physiological_measurement)
+<img src="https://github.com/Gruftgrabbler/Ambient_Intelligence_PPG/blob/main/images/Durchf%C3%BChrung%20der%20dPPG-Messung.png" width="421" height="329">
+
+**Abbildung 1:** Empfohlene Körperhaltung während der Messdurchführung [[2]](https://www.researchgate.net/publication/6482990_Photoplethysmography_and_its_application_in_clinical_physiological_measurement)
 
 Die Fußbewegung führt zur Kompression der Beinvenen und damit zu einem Bluttransport nach proximal (Muskelpumpe). Das abnehmende Blutvolumen
-spiegelt sich in der LRR-Kurve durch eine zunehmende Lichtreflexion wider. Nach Beendigung der Fußbewegung fließt das 
+spiegelt sich in der LRR-Kurve durch eine zunehmende Lichtreflexion wider (Abbildung 2). Nach Beendigung der Fußbewegungen fließt das 
 Blut wieder nach distal. Bei insuffizienten Venen geschieht das schneller, als bei suffizienten Venenklappen 
 [[1]](https://docplayer.org/21805396-Phlebologische-funktionsdiagnostik.html).
 
-![Mustermessung](https://media.springernature.com/original/springer-static/image/chp%3A10.1007%2F978-3-642-23804-8_36/MediaObjects/67823_2_De_36_Fig4_HTML.gif)[[3]](https://link.springer.com/chapter/10.1007/978-3-642-23804-8_36)
+![Mustermessung](https://media.springernature.com/original/springer-static/image/chp%3A10.1007%2F978-3-642-23804-8_36/MediaObjects/67823_2_De_36_Fig4_HTML.gif)
+
+**Abbildung 2:** LRR-Kurve mit zunehmender Lichtreflexion während der Fußbewegungen  [[3]](https://link.springer.com/chapter/10.1007/978-3-642-23804-8_36)
 
 Der Messzyklus läuft vollautomatisch ab, die Messsignale werden ebenfalls automatisch ausgewertet.
 Erfasst werden folgende Parameter zur unterstützenden Diagnostik der Venenfunktion:
@@ -50,7 +54,7 @@ Der Grund für die umgehende Datensicherung liegt in der hohen Eingangsgeschwind
 
 ## Auswertung der Messergebnisse 
 
-<img src="https://github.com/Gruftgrabbler/Ambient_Intelligence_PPG/blob/main/images/Durchf%C3%BChrung%20der%20dPPG-Messung.png" width="421" height="329">
+<img src="https://github.com/Gruftgrabbler/Ambient_Intelligence_PPG/blob/main/images/Messergebnis_normalized.png">
 
 **Tabelle 2:** Ermittelte Parameter aus der automatisierten Analyse der aufgezeichneten Messwerte 
 | Quantitative Parameter        | Messwerte |
