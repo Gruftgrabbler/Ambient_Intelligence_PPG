@@ -191,10 +191,10 @@ class PPGCalculator:
                         ['Half-Refill Idx', self.data_dict['half_refill_index']],
                         ['Half-Refill Amplitude', self.data_dict['half_refill_amp']],
                         ['', ],
-                        ['Medical Paramters'],
+                        ['Medical Parameters'],
                         ['Initial-Refill Time T_i(s)', self.data_dict['initial_refill_time']],
                         ['Half-Refill Time T_50(s)', self.data_dict['half_refill_time']],
-                        ['Venose Filling Time T_0(s)', self.data_dict['full_refill_time']],
+                        ['Venous Filling Time T_0(s)', self.data_dict['full_refill_time']],
                         ['Venous pump capacity V_0 (%)', self.data_dict['venous_pump_capacity']],
                         ['Venous pump function F_0 (%s)', self.data_dict['venous_pump_function']],
                         ], headers=['Parameter', 'Value'], tablefmt="grid", floatfmt=".3f"))
