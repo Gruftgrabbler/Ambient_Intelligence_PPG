@@ -49,7 +49,6 @@ void setup()
   digitalWrite(LED_BUILTIN, LOW);
 
   debug.begin(9600);
-  //debug.println("MAX30105 Basic Readings Example");
 
   // Initialize sensor
   if (particleSensor.begin() == false)
@@ -91,7 +90,7 @@ void loop()
   debug.print(particleSensor.getRed());
   debug.print(",IR=");
   debug.print(particleSensor.getIR());
-  debug.print(", samples=");
+  debug.print(",samples=");
   debug.print(n_samples++);
   debug.println();
 }

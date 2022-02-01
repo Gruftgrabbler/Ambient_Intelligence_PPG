@@ -1,0 +1,65 @@
+name: Static Code Analysis
+
+on: [push]
+
+jobs:
+  Black:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9"]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install black
+    - name: Analysing the code with black
+      run: |
+        black src/ --check --verbose --diff --color
+
+  PyLint_and_MyPy:
+    needs: [Black, CodeSpell]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9"]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pylint mypy -r requirements.txt
+    - name: Analysing the code with pylint
+      run: |
+        pylint src/ --rcfile=ci_config/pylint_config.pylintrc -f colorized
+    - name: Analysing the code with mypy
+      run: |
+        mypy src/ --config-file=ci_config/mypy.ini --install-types --non-interactive
+
+  CodeSpell:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9"]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install git+https://github.com/codespell-project/codespell.git
+    - name: Analysing the code with codespell
+      run: |
+        codespell src/ --config=ci_config/.codespellrc
