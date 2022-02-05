@@ -1,11 +1,11 @@
-from typing import Tuple
+from typing import Tuple, List
 
 import numpy as np
 
 
 def calc_initial_refill_time(
     signal: np.ndarray, time: np.ndarray, last_peak: int, baseline: int
-) -> Tuple[list[np.ndarray], float, int, float]:
+) -> Tuple[List[np.ndarray], float, int, float]:
     # Find the point on the ppg curve which is 3 sec ahead of the last maximum
     # (required for Initial-Refill-Time)
     p3_idx = (
