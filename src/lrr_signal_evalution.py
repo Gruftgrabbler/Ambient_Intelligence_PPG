@@ -18,16 +18,31 @@ from src.utils.signal_analysis import (
 
 
 class LRRCalculator:
-    def __init__(
-        self, sensor_data: Data, print_data: bool = True, plot_data: bool = False
-    ):
-        self.print_data = print_data
-        self.plot_data = plot_data
 
+    def __init__(self, sensor_data: Data):
+        """
+        Initialise the LRRCalculator instance on the given Data
+        :param sensor_data: sensor data which is going to be analysed
+        :type sensor_data: Data
+        """
         self.data = sensor_data
         self.data_dict = None
 
-    def calc_lrr_params(self):
+    def calc_lrr_params(self) -> None:
+        """
+        This method calculates all LRR related parameters using the utiliy methods from lrr_analysis.py
+         and signal_analysis.py.
+
+        initial-regill-time T_i(s)
+        half-refill-time T_50(s)
+        venous filling time T_0(s)
+        Venous pump capacity V_0 (%)
+        venous pump function F_0(%s)
+
+
+        :return: -
+        :rtype: None
+        """
         baseline, signal_start = calc_signal_baseline(self.data.red)
         # self.data.time = self.data.time - baseline.signal_start
 
@@ -50,9 +65,9 @@ class LRRCalculator:
 
         x_np = np.array(self.data.time[last_peak:time_idx_end_intersection])
         y_np = (
-            (np.array(self.data.red[last_peak:time_idx_end_intersection]) - baseline)
-            / baseline
-            * 100
+                (np.array(self.data.red[last_peak:time_idx_end_intersection]) - baseline)
+                / baseline
+                * 100
         )
         venous_pump_function = trapz(y_np, x_np)
 
@@ -83,6 +98,11 @@ class LRRCalculator:
         }
 
     def print_lrr_params(self):
+        """
+        Prints the calculated data on the serial console in a nice table using tabulate.
+        :return: -
+        :rtype: None
+        """
         print(
             tabulate(
                 [
@@ -123,8 +143,21 @@ class LRRCalculator:
         )
 
     def plot_lrr_graph(
-        self, plot_ir=False, plot_red_filter=False, plot_derivation=False
-    ):
+            self, plot_ir=False, plot_red_filter=False, plot_derivation=False):
+        """
+        Plots the signal, the calculated points and the line approximation on a matplotlib window.
+        You can enable additional plots by setting the coresponding variable to True.
+
+        E.g. By plot_lrr_graph(plot_red_filter=True) will also plot the filterd red signal data in a seperate window
+        :param plot_ir: decides if ir data should be plotted or not
+        :type plot_ir: bool
+        :param plot_red_filter: decides if red filter data should be plotted or not
+        :type plot_red_filter: bool
+        :param plot_derivation: decides if the signal derivation should be plotted or not
+        :type plot_derivation: bool
+        :return:. -
+        :rtype: None
+        """
         num_subplots = 1 + sum([plot_ir, plot_red_filter, plot_derivation])
         plot_rows = 2
         plot_cols = num_subplots // plot_rows + num_subplots % plot_rows
@@ -211,6 +244,9 @@ class LRRCalculator:
         plt.show()
 
     def plot_ppg_raw(self):
+        """
+        Just plot the recorded data without any calculation results attached.
+        """
         plt.plot(self.data.time, self.data.red, c="r", label="red readings")
         plt.tight_layout()
         plt.grid()
@@ -218,7 +254,7 @@ class LRRCalculator:
 
 
 def main():
-    file = "../documentation/measurement_data/good_readings/data3.csv"
+    file = "documentation/measurement_data/good_readings/data3.csv"
     data = read_datafile(file)
     ppg = LRRCalculator(data)
     ppg.calc_lrr_params()
