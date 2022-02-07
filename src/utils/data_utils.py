@@ -3,7 +3,7 @@ import numpy as np
 
 class Data:
     """
-    Data Utility Class, which is storing the measured PPG Data readed from the given .csv file
+    Data Utility Class, which is storing the measured PPG Data read from the given .csv file
     """
     def __init__(self, sensor_red: np.ndarray, sensor_ir: np.ndarray, time: np.ndarray):
         """
