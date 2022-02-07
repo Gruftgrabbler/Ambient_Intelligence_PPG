@@ -6,6 +6,24 @@ import numpy as np
 def calc_initial_refill_time(
     signal: np.ndarray, time: np.ndarray, last_peak: int, baseline: int
 ) -> Tuple[List[np.ndarray], float, int, float]:
+    """
+    Calculate the initial refill time from the given PPG signal. It represents the time from the last recorded peak
+    in the signal down to baseline crossing a point on the curve which is 3 seconds after the last peak.
+
+    :param signal: red or infrared data signal, depending on which data you want to use
+    :type signal: np.ndarray
+    :param time: time stemp data which belongs to the given signal
+    :type time: np.ndarray
+    :param last_peak: time_index of the last peak in the given signal
+    :type last_peak: int
+    :param baseline: baseline of the given signal
+    :type baseline: int
+    :return:    line - approximation from last_peak down to baseline,
+                initial_filling_time - Calculated initial refill time in seconds,
+                p3_idx - signal index of the signal point 3 seconds after the last peak
+                p3_time - time stemp of the signal point 3 seconds after the last peak
+    :rtype: List[np.ndarray], float, int, float
+    """
     # Find the point on the ppg curve which is 3 sec ahead of the last maximum
     # (required for Initial-Refill-Time)
     p3_idx = (
@@ -44,6 +62,24 @@ def calc_initial_refill_time(
 def calc_half_refill_time(
     signal: np.ndarray, time: np.ndarray, baseline: int, last_peak: int
 ) -> Tuple[float, int, float]:
+    """
+    Calculate the half refill time from the given PPG signal. It represents the time where the amplitude of the
+    decaying signal crosses a point where its amplitude is only the half of the last peaks amplitude.
+
+    :param signal: signal which is going to be analysed
+    :type signal: np.ndarray
+    :param time: time stemp data of the given signal
+    :type time: np.ndarray
+    :param baseline: baseline of the given signal
+    :type baseline: int
+    :param last_peak: last peak of the givens signal ppg meassurement (time index)
+    :type last_peak: int
+    :return:    half-refill-time - calculated medcial time information
+                half-refill-idx - index of the 50% crossing
+                half-refill-amp - amplitude of the 50% crossing
+    :rtype:
+    """
+
     threshold_half_refill = baseline + (signal[last_peak] - baseline) / 2
     half_refill_idx = (
         next(
@@ -69,10 +105,10 @@ def calc_full_refill_time(
     Return time_end_intersection: Time of the intersection between signal and baseline
     Return amplitude_end_intersection: Amplitude of the signal at intersection point
 
-    :param signal:
-    :param time:
-    :param baseline:
-    :param last_peak:
+    :param signal: signal which is going to be analysed
+    :param time: time stemp data of the given signal
+    :param baseline: baseline of the given signal
+    :param last_peak: last peak of the given signal
     :return:
     """
 
