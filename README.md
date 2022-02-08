@@ -49,6 +49,8 @@ Der MAX30102 PPG-Sensor enthält zwei Leuchtdioden (LEDs), eine infrarote LED (S
 | pulseWidth    |       411      | Valid options: 69, 118, 215, 411. The longer the pulse width, the wider the detection range. Default to be Max range               |
 | adcRange      |      2048      | ADC Measurement Range, default 4096 (nA)，15.63(pA) per LSB at 18 bits resolution                                                  |
 
+Die aufgeführten Werte wurden 
+
 ## Datenaufnahme
 Zur Aufnahme und Speicherung der seriell übertragenen Messwerte durch den ESP32 wurde ein Python-Skript geschrieben (`real_time_plotter.py`). Der Python-Code erfasst die Daten und stellt diese in einem Echtzeit-Plotter grafisch dar. Zeitgleich werden die Messwerte direkt nach dem Empfang in einer *.csv-Datei gespeichert, was als Grundlage der nachfolgenden Analyse dient. 
 Der Grund für die umgehende Datensicherung liegt in der hohen Eingangsgeschwindigkeit der Daten, welche mit einer Aufnahmefrequenz von 20 Hz eintreffen. Um die Datenverarbeitung zwischen den seriellen Erfassungen auf ein Minimum zu reduzieren, findet die weitere Datenverarbeitung nicht in Echtzeit, sondern im Anschluss an die Messung anhand der aufgezeichneten Messwerte in der csv-Datei statt.
