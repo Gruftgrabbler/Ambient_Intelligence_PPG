@@ -1,8 +1,8 @@
 # Venen Funktionsmessung mittels PPG
 Bei der venösen Photoplethysmographie wird die Lichtreflexion (Synonym: Licht-Reflexions-Rheographie, LRR)
 mittels eines PPG-Sensors gemessen. Da Licht von Blut stärker als vom Gewebe absorbiert wird, nimmt
-die Lichtreflexion bei steigendem Blutvolumen im Bein ab. Das PPG-Signal spiegelt daher Blutvolumenschwankungen wider.
-Das PPG-Signal gliedert sich in einen gleich bleibenden Anteil durch Lichtabsorption in nicht-durchblutetem Gewebe 
+die Lichtreflexion bei steigendem Blutvolumen im Bein ab. Das LRR-Signal spiegelt daher Blutvolumenschwankungen wider.
+Das LRR-Signal gliedert sich in einen gleich bleibenden Anteil durch Lichtabsorption in nicht-durchblutetem Gewebe 
 (ca. 90 %), eine variable Lichtabsorption durch das venöse Blutvolumen (ca. 10 %) und eine periodische arterielle 
 Lichtabsorption (ca. 0,5 %). Mithilfe digitaler Filtertechniken können diese Signale voneinander getrennt werden 
 (digitale Photoplethysmographie, dPPG) [[1]](https://docplayer.org/21805396-Phlebologische-funktionsdiagnostik.html).
@@ -13,18 +13,18 @@ Lichtabsorption (ca. 0,5 %). Mithilfe digitaler Filtertechniken können diese Si
 Der sitzende Patient führt acht Dorsalextensionen im Sprunggelenk innerhalb von 16 Sekunden im Metronomrhythmus durch. Die Ferse ist dabei am Boden
 abgestützt. Der PPG-Sensor wird mithilfe des 3D gedruckten Gehäuses ca. 10 cm oberhalb des Malleolus medialis angebracht (Abbildung 1). 
 
-<img src="https://github.com/Gruftgrabbler/Ambient_Intelligence_PPG/blob/main/images/Durchf%C3%BChrung%20der%20dPPG-Messung.png" width="421" height="329">
+<img src="https://github.com/Gruftgrabbler/Ambient_Intelligence_PPG/blob/main/documentation/images/Durchf%C3%BChrung%20der%20dPPG-Messung.png" width="421" height="329">
 
 **Abbildung 1:** empfohlene Körperhaltung während der Messdurchführung [[2]](https://www.researchgate.net/publication/6482990_Photoplethysmography_and_its_application_in_clinical_physiological_measurement)
 
 Die Fußbewegung führt zur Kompression der Beinvenen und damit zu einem Bluttransport nach proximal (Muskelpumpe). Das abnehmende Blutvolumen
-spiegelt sich in der PPG-Kurve durch eine zunehmende Lichtreflexion wider (Abbildung 2). Nach Beendigung der Fußbewegungen fließt das 
+spiegelt sich in der LRR-Kurve durch eine zunehmende Lichtreflexion wider (Abbildung 2). Nach Beendigung der Fußbewegungen fließt das 
 Blut wieder nach distal. Bei insuffizienten Venen geschieht das schneller, als bei suffizienten Venenklappen 
 [[1]](https://docplayer.org/21805396-Phlebologische-funktionsdiagnostik.html).
 
 ![Mustermessung](https://media.springernature.com/original/springer-static/image/chp%3A10.1007%2F978-3-642-23804-8_36/MediaObjects/67823_2_De_36_Fig4_HTML.gif)
 
-**Abbildung 2:** PPG-Kurve mit zunehmender Lichtreflexion während der Fußbewegungen  [[3]](https://link.springer.com/chapter/10.1007/978-3-642-23804-8_36)
+**Abbildung 2:** LRR-Kurve mit zunehmender Lichtreflexion während der Fußbewegungen  [[3]](https://link.springer.com/chapter/10.1007/978-3-642-23804-8_36)
 
 Der Messzyklus läuft vollautomatisch ab, die Messsignale werden ebenfalls automatisch ausgewertet.
 Erfasst werden folgende Parameter zur unterstützenden Diagnostik der Venenfunktion:
@@ -55,11 +55,11 @@ Der Grund für die umgehende Datensicherung liegt in der hohen Eingangsgeschwind
 
 
 ## Vorverarbeitung der Daten
-Für den Import der Messdaten aus der resultierenden CSV-Datei und die anschließende Datenverarbeitung zur Analyse wurde ein zweites Skript geschrieben (`plot_csv.py`). Der erste Schritt bei der Verarbeitung der PPG-Daten besteht darin, die Basislinie unserer Messdaten zu ermitteln. Hierfür betrachten wir die Ableitung erster Ordnung und ermitteln den Startzeitpunkt der Fußbewegungen anhand des Kurvenanstiegs über einen experimentell ermittelten Grenzwert hinaus. Der letzte Zeitpunkt vor dem Überschreiten des Grenzwerts wird als Startzeitpunkt der Messdurchführung definiert, die zugehörige Signalamplitude als Basislinie.
+Für den Import der Messdaten aus der resultierenden CSV-Datei und die anschließende Datenverarbeitung zur Analyse wurde ein zweites Skript geschrieben (`plot_csv.py`). Der erste Schritt bei der Verarbeitung der LRR-Daten besteht darin, die Basislinie unserer Messdaten zu ermitteln. Hierfür betrachten wir die Ableitung erster Ordnung und ermitteln den Startzeitpunkt der Fußbewegungen anhand des Kurvenanstiegs über einen experimentell ermittelten Grenzwert hinaus. Der letzte Zeitpunkt vor dem Überschreiten des Grenzwerts wird als Startzeitpunkt der Messdurchführung definiert, die zugehörige Signalamplitude als Basislinie.
 
 Im nächsten Schritt werden die Daten durch einen Tiefpass 4. Ordnung gefiltert. Die untere Grenzfrequenz wurde auf 3 Hz gewählt, um die Gleichstromkomponente der Daten zu entfernen. Anschließend werden die Zeitpunkte und Amplituden der lokalen Maxima mit der in Scipy integrierten Funktion *findpeaks* ermittelt. Für die weitere Analyse ist nur der zuletzt aufgetretene Höhepunkt nach Belastungsstop <img src="https://render.githubusercontent.com/render/math?math=R_{max}"> von Relevanz. In Abbildung 3 ist eine Messdurchführung mit relevanten Punkten für die weitere Analyse dargestellt.
 
-<img src="https://github.com/Gruftgrabbler/Ambient_Intelligence_PPG/blob/main/images/Messergebnis_normalized.png">
+<img src="https://github.com/Gruftgrabbler/Ambient_Intelligence_PPG/blob/main/documentation/images/Messergebnis.png">
 
 **Abbildung 3:** Messdurchführung mit relevanten Punkten
 
