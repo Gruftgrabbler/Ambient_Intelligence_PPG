@@ -96,8 +96,9 @@ Die Berechnung der erfassten Messparameter ist der Fachliteratur entnommen [[7]]
 
 3. Eine Gerade zwischen <img src="https://render.githubusercontent.com/render/math?math=R_{max}"> und dem Kurvenpunkt nach drei Sekunden Abfall wird bis zur Basislinie verlängert und ergibt dort im Schnittpunkt die initiale Auffüllzeit.
 
-4. Die venöse Pumpleistung folgt aus der Signalamplitude, nachdem es mit der Amplitude der Basislinie normiert wurde:
-<img src="https://render.githubusercontent.com/render/math?math=V_0 = \frac{R_{max} - Basislinie}{Basislinie} \cdot 100">
+4. Die venöse Pumpleistung folgt aus der Signalamplitude, nachdem die Signalamplitude mit der Amplitude der Basislinie normiert wurde:
+
+      <img src="https://render.githubusercontent.com/render/math?math=V_0 = \frac{R_{max} - Basislinie}{Basislinie} \cdot 100 \text{percent}">
 
 5. Die venöse Pumparbeit wird durch Integration der venösen Pumpleistung über das Zeitintervall zwischen <img src="https://render.githubusercontent.com/render/math?math=R_{max}"> und dem Ende des Kurvenabfalls am Schnittpunkt mit der Basislinie ermittelt.
 
