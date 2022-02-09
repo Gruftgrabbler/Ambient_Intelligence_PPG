@@ -66,6 +66,11 @@ In unserem Anwendungsfall ist der Energieverbrauch des Sensors unerheblich, da d
 
 Im Datenblatt zu den empfohlenen Konfigurationen zum Betrieb des MAX30102 wird empfohlen, den ADC auf seinen höchsten Gain (= Verstärkungseinstellung) zu setzen (full-scale range = 2,048 μA). Wenn der Kanal gesättigt ist, muss die Verstärkungseinstellung auf den nächst niedrigeren Wert eingestellt werden. [[6]](https://www.maximintegrated.com/en/products/interface/sensor-interface/MAX30102.html)
 
+Der Sensor wird zur Befestigung am Bein in einem 3D gedruckten Gehäuse untergebracht (Abbildung 4). Anschließend wird ein Klettverschlussband oder ein dehnfähiges Band durch die Halterungsschlaufe hindurchgeführt und der Sensor wie in der Versuchsdurchführung beschrieben am Bein befestigt. Hierbei ist auf einen lockeren und nicht zu festen Anpressdruck zu achten!
+
+![MAX30102 Clip - Render](https://github.com/Gruftgrabbler/Ambient_Intelligence_PPG/blob/main/hardware/sensor_case/MAX30102%20Clip%20-%20Render_without_background.png)
+
+**Abbildung 4:** Rendering des CAD Designs vom MAX30102 Clip zur Befestigung am Bein.
 
 ## Datenaufnahme
 Zur Aufnahme und Speicherung der seriell übertragenen Messwerte durch den ESP32 wurde ein Python-Skript geschrieben (`real_time_plotter.py`). Der Python-Code erfasst die Daten und stellt diese in einem Echtzeit-Plotter grafisch dar. Zeitgleich werden die Messwerte direkt nach dem Empfang in einer *.csv-Datei gespeichert, was als Grundlage der nachfolgenden Analyse dient. 
@@ -75,11 +80,11 @@ Der Grund für die umgehende Datensicherung liegt in der hohen Eingangsgeschwind
 ## Vorverarbeitung der Daten
 Für den Import der Messdaten aus der resultierenden CSV-Datei und die anschließende Datenverarbeitung zur Analyse wurde ein zweites Skript geschrieben (`plot_csv.py`). Der erste Schritt bei der Verarbeitung der LRR-Daten besteht darin, die Basislinie unserer Messdaten zu ermitteln. Hierfür betrachten wir die Ableitung erster Ordnung und ermitteln den Startzeitpunkt der Fußbewegungen anhand des Kurvenanstiegs über einen experimentell ermittelten Grenzwert hinaus. Der letzte Zeitpunkt vor dem Überschreiten des Grenzwerts wird als Startzeitpunkt der Messdurchführung definiert, die zugehörige Signalamplitude als Basislinie.
 
-Im nächsten Schritt werden die Daten durch einen Tiefpass 4. Ordnung gefiltert. Die untere Grenzfrequenz wurde auf 3 Hz gewählt, um die Gleichstromkomponente der Daten zu entfernen. Anschließend werden die Zeitpunkte und Amplituden der lokalen Maxima mit der in Scipy integrierten Funktion *findpeaks* ermittelt. Für die weitere Analyse ist nur der zuletzt aufgetretene Höhepunkt nach Belastungsstop <img src="https://render.githubusercontent.com/render/math?math=R_{max}"> von Relevanz. In Abbildung 4 ist eine Messdurchführung mit relevanten Punkten für die weitere Analyse dargestellt.
+Im nächsten Schritt werden die Daten durch einen Tiefpass 4. Ordnung gefiltert. Die untere Grenzfrequenz wurde auf 3 Hz gewählt, um die Gleichstromkomponente der Daten zu entfernen. Anschließend werden die Zeitpunkte und Amplituden der lokalen Maxima mit der in Scipy integrierten Funktion *findpeaks* ermittelt. Für die weitere Analyse ist nur der zuletzt aufgetretene Höhepunkt nach Belastungsstop <img src="https://render.githubusercontent.com/render/math?math=R_{max}"> von Relevanz. In Abbildung 5 ist eine Messdurchführung mit relevanten Punkten für die weitere Analyse dargestellt.
 
 <img src="https://github.com/Gruftgrabbler/Ambient_Intelligence_PPG/blob/main/documentation/images/Messergebnis.png">
 
-**Abbildung 4:** Messdurchführung mit relevanten Punkten
+**Abbildung 5:** Messdurchführung mit relevanten Punkten
 
 
 ## Auswertung der Messergebnisse 
@@ -96,7 +101,7 @@ Die Berechnung der erfassten Messparameter ist der Fachliteratur entnommen [[7]]
 
 5. Die venöse Pumparbeit wird durch Integration der venösen Pumpleistung über das Zeitintervall zwischen <img src="https://render.githubusercontent.com/render/math?math=R_{max}"> und dem Ende des Kurvenabfalls am Schnittpunkt mit der Basislinie ermittelt.
 
-In Tabelle 2 sind die ermittelten quantitativen Parameter für das Messsignal in Abbildung 4 gelistet.
+In Tabelle 2 sind die ermittelten quantitativen Parameter für das Messsignal in Abbildung 5 gelistet.
 
 **Tabelle 2:** ermittelte Parameter aus der automatisierten Analyse der aufgezeichneten Messwerte 
 | Quantitative Parameter        | Messwerte |
@@ -121,13 +126,15 @@ In Tabelle 2 sind die ermittelten quantitativen Parameter für das Messsignal in
 * SparkFun MAX3010x Sensor Library für die Datenaufnahme
 * Python 3.9 für die weitere Datenverarbeitung
 
-## Pull repository including submodules
+## Getting Started
 
-```
- git submodule update --init --recursive
-```
+Stelle zunächst sicher, dass Python 3.8 auf dem Rechner installiert ist.
 
-## Anleitung zur Messdurchführung
+1. Best practice: Erstelle ein neues Virtual Environment, beispielsweise unter Verwendung von Anaconda oder PyCharm
+2. Pullen des Repository einschließlich der Submodule: `git submodule update --init --recursive`
+3. Installieren Sie die Projekt-Requirements mittels pip: `pip install -r requirements.txt`
+
+### Anleitung zur Messdurchführung
 1. Drucke das Gehäuse des PPG-Sensors mit einem 3D-Drucker aus und setze den MAX30102-Sensor ein. Führe anschließend ein Klettverschlussband oder ein dehnfähiges Band durch die Halterungsschlaufe hindurch und befestige den Sensor wie in der Versuchsdurchführung beschrieben am Bein. Hierbei ist auf einen lockeren und nicht zu festen Anpressdruck zu achten!
 2. Stelle eine Hardware Verbindung zwischen dem MAX30102-Sensor und dem ESP32 her
 3. Flashe den ESP32 mit der *MAX30102_Basic_Readings.ino* im Projektordner *arduino-sketches/MAX30102_Basic_Readings/*
