@@ -28,6 +28,7 @@ class LRRCalculator:
         self.data = sensor_data
         self.data_dict = None
 
+
     def calc_lrr_params(self, normalize_amplitude=True) -> None:
         """
         This method calculates all LRR related parameters using the utiliy methods from lrr_analysis.py
@@ -71,7 +72,7 @@ class LRRCalculator:
 
             x_np = np.array(self.data.time[last_peak:time_idx_end_intersection])
             y_np = (
-                    (np.array(self.data.red[last_peak:time_idx_end_intersection]))
+                (np.array(self.data.red[last_peak:time_idx_end_intersection]))
             )
         else:
             venous_pump_capacity = (self.data.red[last_peak] - baseline) / baseline * 100
@@ -109,6 +110,7 @@ class LRRCalculator:
             "venous_pump_capacity": venous_pump_capacity,
             "venous_pump_function": venous_pump_function,
             "signal_filtered": signal_filtered,
+            "normalize_amplitudfe" : normalize_amplitude
         }
 
     def print_lrr_params(self):
@@ -259,7 +261,7 @@ class LRRCalculator:
             plot_index += 1
 
         plt.xlabel('Time (s)')
-        plt.ylabel('Amplitude')
+        plt.ylabel('Amplitude') if self.data_dict.get('normalize_amplitude') else plt.ylabel('Reflection increase (%)')
         plt.grid()
         plt.legend()
         plt.tight_layout()
