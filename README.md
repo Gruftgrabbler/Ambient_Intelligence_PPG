@@ -24,7 +24,7 @@ Blut wieder nach distal. Bei insuffizienten Venen geschieht das schneller, als b
 
 ![Mustermessung](https://media.springernature.com/original/springer-static/image/chp%3A10.1007%2F978-3-642-23804-8_36/MediaObjects/67823_2_De_36_Fig4_HTML.gif)
 
-**Abbildung 2:** LRR-Kurve mit zunehmender Lichtreflexion während der Fußbewegungen  [[3]](https://link.springer.com/chapter/10.1007/978-3-642-23804-8_36)
+**Abbildung 2:** LRR-Kurve mit zunehmender Lichtreflexion während der Fußbewegungen  [[3]](https://link.springer.com/chapter/10.1007/978-3-642-23804-8_36) [[4]](https://link.springer.com/chapter/10.1007/978-3-642-01709-4_35)
 
 Der Messzyklus läuft vollautomatisch ab, die Messsignale werden ebenfalls automatisch ausgewertet.
 Erfasst werden folgende Parameter zur unterstützenden Diagnostik der Venenfunktion:
@@ -140,3 +140,7 @@ In Tabelle 2 sind die ermittelten quantitativen Parameter für das Messsignal in
 [[1]](https://docplayer.org/21805396-Phlebologische-funktionsdiagnostik.html) Stücker, M. & Doerler, M. (2014). Phlebological functional diagnostics. Phlebologie, 43(05), 268–272. https://doi.org/10.12687/phleb2213-5-2014
 
 [[2]](https://www.researchgate.net/publication/6482990_Photoplethysmography_and_its_application_in_clinical_physiological_measurement) Allen, John. (2007). Photoplethysmography and its application in clinical physiological measurement. Physiological Measurement. 28. R1-39. 10.1088/0967-3334/28/3/R01. 
+
+[[3]](https://link.springer.com/chapter/10.1007/978-3-642-23804-8_36) Noppeney T. (2013) Varikose. In: Jauch KW., Mutschler W., Hoffmann J., Kanz KG. (eds) Chirurgie Basisweiterbildung. Springer, Berlin, Heidelberg. https://doi.org/10.1007/978-3-642-23804-8_36
+
+[[4]](https://link.springer.com/chapter/10.1007/978-3-642-01709-4_35) Noppeney T., Nüllen H. (2012) Varikose der unteren Extremität. In: Debus E., Gross-Fengels W. (eds) Operative und interventionelle Gefäßmedizin. Springer, Berlin, Heidelberg. https://doi.org/10.1007/978-3-642-01709-4_35
