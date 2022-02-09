@@ -141,7 +141,7 @@ In Tabelle 2 sind die ermittelten quantitativen Parameter für das Messsignal in
 
 [[1]](https://docplayer.org/21805396-Phlebologische-funktionsdiagnostik.html) Stücker, M. & Doerler, M. (2014). Phlebological functional diagnostics. Phlebologie, 43(05), 268–272. https://doi.org/10.12687/phleb2213-5-2014
 
-[[2]](https://www.researchgate.net/publication/6482990_Photoplethysmography_and_its_application_in_clinical_physiological_measurement) Allen, John. (2007). Photoplethysmography and its application in clinical physiological measurement. Physiological Measurement. 28. R1-39. 10.1088/0967-3334/28/3/R01. 
+[[2]](https://www.researchgate.net/publication/6482990_Photoplethysmography_and_its_application_in_clinical_physiological_measurement) Allen, John. (2007). Photoplethysmography and its application in clinical physiological measurement. Physiological Measurement. 28. R1-39. https://doi.org/10.1088/0967-3334/28/3/R01
 
 [[3]](https://link.springer.com/chapter/10.1007/978-3-642-23804-8_36) Noppeney T. (2013) Varikose. In: Jauch KW., Mutschler W., Hoffmann J., Kanz KG. (eds) Chirurgie Basisweiterbildung. Springer, Berlin, Heidelberg. https://doi.org/10.1007/978-3-642-23804-8_36
 
@@ -153,6 +153,6 @@ In Tabelle 2 sind die ermittelten quantitativen Parameter für das Messsignal in
 
 [[7]](https://www.thieme-connect.de/products/ebooks/lookinside/10.1055/b-0034-8814) Rabe, E. & Gerlach, H. E. (Hrsg.). (2006). 3.4 Photoplethysmographie. In: Praktische Phlebologie - Empfehlungen zur differenzierten Diagnostik und Therapie phlebologischer Krankheitsbilder, (2. vollständig überarbeitete Auflage Thieme Verlagsgruppe, Stuttgart, New York, Delhi, Rio), 38–40. https://doi.org/10.1055/b-0034-8814
 
-[[8]](https://eref.thieme.de/cockpits/clNuN0001clHAM0004/0/coNuN00260/4-910) Ludwig M, Rieger J, Ruppert V. Auswertung. In: Ludwig M, Rieger J, Ruppert V, Hrsg. Gefäßmedizin in Klinik und Praxis. 2., komplett überarbeitete und aktualisierte Auflage. Stuttgart: Thieme; 2010. doi:10.1055/b-002-10340
+[[8]](https://eref.thieme.de/cockpits/clNuN0001clHAM0004/0/coNuN00260/4-910) Ludwig M, Rieger J, Ruppert V. Auswertung. In: Ludwig M, Rieger J, Ruppert V, Hrsg. Gefäßmedizin in Klinik und Praxis. 2., komplett überarbeitete und aktualisierte Auflage. Stuttgart: Thieme; 2010. https://doi.org/10.1055/b-002-10340
 
 [[9]](http://docplayer.org/19942299-Dynamische-venenfunktionstests-auf-dem-pruefstand.html) Häfner, H. M., Bablich, H., Rassner, G., Jünger, M. & Steins, A. (2002). Dynamische Venenfunktionstests auf dem Prüfstand. Phlebologie, 31(04), 85–90. https://doi.org/10.1055/s-0037-1621393
