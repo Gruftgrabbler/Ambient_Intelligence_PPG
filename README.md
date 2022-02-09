@@ -60,7 +60,7 @@ Abbildung 3 zeigt die zulässigen Einstellungen für die Messung der Blutvolumen
 
 ![pulse_width_configuration](https://github.com/Gruftgrabbler/Ambient_Intelligence_PPG/blob/main/documentation/images/MAX30102_pulse_width_configuration.png)
 
-**Abbildung 3:** Zulässige Einstellungen für die Herzfrequenz-Konfiguration. [[4]](https://pdfserv.maximintegrated.com/en/an/AN6409.pdf)
+**Abbildung 3:** Zulässige Einstellungen für die Pulsweiten-Konfiguration im Einzel-LED Betrieb. [[4]](https://pdfserv.maximintegrated.com/en/an/AN6409.pdf)
 
 In unserem Anwendungsfall ist der Energieverbrauch des Sensors unerheblich, da der Sensor nicht in einer Wearable-Anwendung mit begrenzter Energieversorgung eingesetzt wird, sondern über die Energiezufuhr vom ESP32 bzw. vom PC gespeist wird. 
 
