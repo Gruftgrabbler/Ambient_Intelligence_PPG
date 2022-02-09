@@ -24,7 +24,7 @@ Blut wieder nach distal. Bei insuffizienten Venen geschieht das schneller, als b
 
 ![Mustermessung](https://media.springernature.com/original/springer-static/image/chp%3A10.1007%2F978-3-642-23804-8_36/MediaObjects/67823_2_De_36_Fig4_HTML.gif)
 
-**Abbildung 2:** LRR-Kurve mit zunehmender Lichtreflexion während der Fußbewegungen  [[3]](https://link.springer.com/chapter/10.1007/978-3-642-23804-8_36) [[4]](https://link.springer.com/chapter/10.1007/978-3-642-01709-4_35)
+**Abbildung 2:** LRR-Kurve mit zunehmender Lichtreflexion während der Fußbewegungen  [[3]](https://link.springer.com/chapter/10.1007/978-3-642-23804-8_36)[[4]](https://link.springer.com/chapter/10.1007/978-3-642-01709-4_35)
 
 Der Messzyklus läuft vollautomatisch ab, die Messsignale werden ebenfalls automatisch ausgewertet.
 Erfasst werden folgende Parameter zur unterstützenden Diagnostik der Venenfunktion:
@@ -83,6 +83,8 @@ Im nächsten Schritt werden die Daten durch einen Tiefpass 4. Ordnung gefiltert.
 
 
 ## Auswertung der Messergebnisse 
+Die Berechnung der erfassten Messparameter folgt aus der Fachliteratur [[7]](https://www.thieme-connect.de/products/ebooks/lookinside/10.1055/b-0034-8814)[[8]](https://eref.thieme.de/cockpits/clNuN0001clHAM0004/0/coNuN00260/4-910)[[9]](http://docplayer.org/19942299-Dynamische-venenfunktionstests-auf-dem-pruefstand.html).
+
 Aus dem Zeitintervall zwischen <img src="https://render.githubusercontent.com/render/math?math=R_{max}"> und dem Ende des Kurvenabfalls am Schnittpunkt mit der Basislinie ergibt sich die venöse Auffüllzeit.
 
 Aus dem Zeitintervall zwischen <img src="https://render.githubusercontent.com/render/math?math=R_{max}"> und dem Unterschreiten von 50% der Amplitude von <img src="https://render.githubusercontent.com/render/math?math=R_{max}"> ergibt sich die venöse Halbwertszeit.
@@ -148,3 +150,9 @@ In Tabelle 2 sind die ermittelten quantitativen Parameter für das Messsignal in
 [[5]](https://pdfserv.maximintegrated.com/en/an/AN6409.pdf) MAX3010x EV Kits: Recommended Configurations and Operating Profiles. (2018b, Juni 27). Maxim Integrated - Analog, Linear, and Mixed-Signal Devices. Abgerufen am 9. Februar 2022, von https://www.maximintegrated.com/en/design/technical-documents/userguides-and-manuals/6/6409.html
 
 [[6]](https://www.maximintegrated.com/en/products/interface/sensor-interface/MAX30102.html) MAX30102 High-Sensitivity Pulse Oximeter and Heart-Rate Sensor for Wearable Health. (2020, 13. Februar). Maxim Integrated - Analog, Linear, and Mixed-Signal Devices. Abgerufen am 9. Februar 2022, von https://www.maximintegrated.com/en/products/interface/sensor-interface/MAX30102.html
+
+[[7]](https://www.thieme-connect.de/products/ebooks/lookinside/10.1055/b-0034-8814) Rabe, E. & Gerlach, H. E. (Hrsg.). (2006). 3.4 Photoplethysmographie. In: Praktische Phlebologie - Empfehlungen zur differenzierten Diagnostik und Therapie phlebologischer Krankheitsbilder, (2. vollständig überarbeitete Auflage Thieme Verlagsgruppe, Stuttgart, New York, Delhi, Rio), 38–40. https://doi.org/10.1055/b-0034-8814
+
+[[8]](https://eref.thieme.de/cockpits/clNuN0001clHAM0004/0/coNuN00260/4-910) Ludwig M, Rieger J, Ruppert V. Auswertung. In: Ludwig M, Rieger J, Ruppert V, Hrsg. Gefäßmedizin in Klinik und Praxis. 2., komplett überarbeitete und aktualisierte Auflage. Stuttgart: Thieme; 2010. doi:10.1055/b-002-10340
+
+[[9]](http://docplayer.org/19942299-Dynamische-venenfunktionstests-auf-dem-pruefstand.html) Häfner, H. M., Bablich, H., Rassner, G., Jünger, M. & Steins, A. (2002). Dynamische Venenfunktionstests auf dem Prüfstand. Phlebologie, 31(04), 85–90. https://doi.org/10.1055/s-0037-1621393
