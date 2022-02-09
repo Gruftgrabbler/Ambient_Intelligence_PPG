@@ -133,3 +133,10 @@ In Tabelle 2 sind die ermittelten quantitativen Parameter für das Messsignal in
    `pip install -r requirements.txt`
 5. Führe das Skript `real_time_plotter.py` in der Python IDE deiner Wahl aus. Es öffnet sich eine GUI mit den Messsignalen der roten und infraroten LEDs. Zur problemlosen Analyse der Messdaten wird empfohlen, dass nur ein einziger vollständiger Messdurchgang pro csv-Datei gespeichert wird. Dies wird durch Beenden des Skripts nach Abschluss der Messung erreicht.
 6. Führe zur Bestimmung der diagnostisch relevanten quantitativen Parameter das Skript `plot_csv.py` aus. Sofern die Messung vorher korrekt durchgeführt wurde, gibt das Skript die gesuchten Parameter in der Konsole aus und stellt das Messsignal mitsamt einigen relevanten Punkten grafisch dar.
+
+
+## Literaturverzeichnis
+
+[[1]](https://docplayer.org/21805396-Phlebologische-funktionsdiagnostik.html) Stücker, M. & Doerler, M. (2014). Phlebological functional diagnostics. Phlebologie, 43(05), 268–272. https://doi.org/10.12687/phleb2213-5-2014
+
+[[2]](https://www.researchgate.net/publication/6482990_Photoplethysmography_and_its_application_in_clinical_physiological_measurement) Allen, John. (2007). Photoplethysmography and its application in clinical physiological measurement. Physiological Measurement. 28. R1-39. 10.1088/0967-3334/28/3/R01. 
