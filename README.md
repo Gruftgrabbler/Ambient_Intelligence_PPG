@@ -144,7 +144,7 @@ Stelle zunächst sicher, dass Python 3.8 auf dem Rechner installiert ist.
 6. Führe zur Bestimmung der diagnostisch relevanten quantitativen Parameter das Skript `plot_csv.py` aus. Sofern die Messung vorher korrekt durchgeführt wurde, gibt das Skript die gesuchten Parameter in der Konsole aus und stellt das Messsignal mitsamt einigen relevanten Punkten grafisch dar.
 
 
-## Literaturverzeichnis
+# Literaturverzeichnis
 
 [[1]](https://docplayer.org/21805396-Phlebologische-funktionsdiagnostik.html) Stücker, M. & Doerler, M. (2014). Phlebological functional diagnostics. Phlebologie, 43(05), 268–272. https://doi.org/10.12687/phleb2213-5-2014
 
