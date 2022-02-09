@@ -57,7 +57,14 @@ void setup()
     while (1);
   }
 
-  particleSensor.setup(); //Configure sensor. Use 6.4mA for LED drive
+    //Let's configure the sensor to run fast so we can over-run the buffer and cause an interrupt
+  byte ledBrightness = 0x66; //Options: 0=Off to 255=50mA
+  byte sampleAverage = 4; //Options: 1, 2, 4, 8, 16, 32
+  byte ledMode = 1; //Options: 1 = Red only, 2 = Red + IR, 3 = Red + IR + Green
+  byte sampleRate = 1000; //Options: 50, 100, 200, 400, 800, 1000, 1600, 3200
+  int pulseWidth = 411; //Options: 69, 118, 215, 411
+  int adcRange = 2048; //Options: 2048, 4096, 8192, 16384
+  particleSensor.setup(ledBrightness, sampleAverage, ledMode, sampleRate, pulseWidth, adcRange); //Configure sensor with these settings
 
   n_samples = 0;
   t_start = millis();
