@@ -83,18 +83,18 @@ Im nächsten Schritt werden die Daten durch einen Tiefpass 4. Ordnung gefiltert.
 
 
 ## Auswertung der Messergebnisse 
-Die Berechnung der erfassten Messparameter folgt aus der Fachliteratur [[7]](https://www.thieme-connect.de/products/ebooks/lookinside/10.1055/b-0034-8814)[[8]](https://eref.thieme.de/cockpits/clNuN0001clHAM0004/0/coNuN00260/4-910)[[9]](http://docplayer.org/19942299-Dynamische-venenfunktionstests-auf-dem-pruefstand.html).
+Die Berechnung der erfassten Messparameter ist der Fachliteratur entnommen [[7]](https://www.thieme-connect.de/products/ebooks/lookinside/10.1055/b-0034-8814)[[8]](https://eref.thieme.de/cockpits/clNuN0001clHAM0004/0/coNuN00260/4-910)[[9]](http://docplayer.org/19942299-Dynamische-venenfunktionstests-auf-dem-pruefstand.html):
 
-Aus dem Zeitintervall zwischen <img src="https://render.githubusercontent.com/render/math?math=R_{max}"> und dem Ende des Kurvenabfalls am Schnittpunkt mit der Basislinie ergibt sich die venöse Auffüllzeit.
+1. Aus dem Zeitintervall zwischen <img src="https://render.githubusercontent.com/render/math?math=R_{max}"> und dem Ende des Kurvenabfalls am Schnittpunkt mit der Basislinie ergibt sich die venöse Auffüllzeit.
 
-Aus dem Zeitintervall zwischen <img src="https://render.githubusercontent.com/render/math?math=R_{max}"> und dem Unterschreiten von 50% der Amplitude von <img src="https://render.githubusercontent.com/render/math?math=R_{max}"> ergibt sich die venöse Halbwertszeit.
+2. Aus dem Zeitintervall zwischen <img src="https://render.githubusercontent.com/render/math?math=R_{max}"> und dem Unterschreiten von 50% der Amplitude von <img src="https://render.githubusercontent.com/render/math?math=R_{max}"> ergibt sich die venöse Halbwertszeit.
 
-Eine Gerade zwischen <img src="https://render.githubusercontent.com/render/math?math=R_{max}"> und dem Kurvenpunkt nach drei Sekunden Abfall wird bis zur Basislinie verlängert und ergibt dort im Schnittpunkt die initiale Auffüllzeit.
+3. Eine Gerade zwischen <img src="https://render.githubusercontent.com/render/math?math=R_{max}"> und dem Kurvenpunkt nach drei Sekunden Abfall wird bis zur Basislinie verlängert und ergibt dort im Schnittpunkt die initiale Auffüllzeit.
 
-Die venöse Pumpleistung folgt aus der Signalamplitude, nachdem es mit der Amplitude der Basislinie normiert wurde:
+4. Die venöse Pumpleistung folgt aus der Signalamplitude, nachdem es mit der Amplitude der Basislinie normiert wurde:
 <img src="https://render.githubusercontent.com/render/math?math=V_0 = \frac{R_{max} - Basislinie}{Basislinie} \cdot 100">
 
-Die venöse Pumparbeit wird durch Integration der venösen Pumpleistung über das Zeitintervall zwischen <img src="https://render.githubusercontent.com/render/math?math=R_{max}"> und dem Ende des Kurvenabfalls am Schnittpunkt mit der Basislinie ermittelt.
+5. Die venöse Pumparbeit wird durch Integration der venösen Pumpleistung über das Zeitintervall zwischen <img src="https://render.githubusercontent.com/render/math?math=R_{max}"> und dem Ende des Kurvenabfalls am Schnittpunkt mit der Basislinie ermittelt.
 
 In Tabelle 2 sind die ermittelten quantitativen Parameter für das Messsignal in Abbildung 4 gelistet.
 
