@@ -158,14 +158,18 @@ class LRRCalculator:
         :return:. -
         :rtype: None
         """
-        num_subplots = 1 + sum([plot_ir, plot_red_filter, plot_derivation])
-        plot_rows = 2
+        num_subplots = 1 + sum([plot_ir, plot_derivation])
+        if num_subplots > 1:
+            plot_rows = 2
+        else:
+            plot_rows = 1
         plot_cols = num_subplots // plot_rows + num_subplots % plot_rows
         plot_index = 1
 
         if plot_ir:
             plt.subplot(plot_rows, plot_cols, plot_index)
             plt.plot(self.data.time, self.data.ir, label="ir readings")
+            plt.ylabel('Amplitude')
             plt.grid()
             plt.legend()
             plot_index += 1
@@ -232,7 +236,7 @@ class LRRCalculator:
             )  # plot last peaks
             plt.grid()
             plt.legend()
-            plot_index += 1
+            # plot_index += 1
 
         if plot_derivation:
             gradient = np.gradient(self.data.red, axis=0)
@@ -240,6 +244,10 @@ class LRRCalculator:
             plt.plot(self.data.time, gradient, c="k", label="Red Derivation")
             plot_index += 1
 
+        plt.xlabel('Time (s)')
+        plt.ylabel('Amplitude')
+        plt.grid()
+        plt.legend()
         plt.tight_layout()
         plt.show()
 
