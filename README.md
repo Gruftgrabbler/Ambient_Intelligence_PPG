@@ -117,14 +117,14 @@ In Tabelle 2 sind die ermittelten quantitativen Parameter für das Messsignal in
 
 ## Hardware
 
-* Adafruit HUZZAH32 – ESP32 Feather Board
+* Adafruit HUZZAH32 – ESP32 Feather Board oder ein alternativer Microcontroller mit I2C-Bus Ansteuerung
 * MAX30102 Heart Rate/SpO2 Sensor
 * 3D gedrucktes Gehäuse zur Befestigung des Sensors am Bein
 
 ## Software
 
 * SparkFun MAX3010x Sensor Library für die Datenaufnahme
-* Python 3.9 für die weitere Datenverarbeitung
+* Python 3.8 für die weitere Datenverarbeitung
 
 ## Getting Started
 
