@@ -64,7 +64,7 @@ Die Pulsweite gibt an, wie lange das Abtastsignal aktiv ist. Je länger das Sign
 
 In unserem Anwendungsfall ist der Energieverbrauch des Sensors unerheblich, da der Sensor nicht in einer Wearable-Anwendung mit begrenzter Energieversorgung eingesetzt wird, sondern über die Energiezufuhr vom ESP32 bzw. vom PC gespeist wird. 
 
-Im Datenblatt zu den empfohlenen Konfigurationen zum Betrieb des MAX30102 wird empfohlen, den ADC auf seinen höchsten Gain (= Verstärkungseinstellung) zu setzen (full-scale range = 2,048 μA). Wenn der Kanal gesättigt ist, muss die Verstärkungseinstellung auf den nächst niedrigeren Wert eingestellt werden. [[6]](https://www.maximintegrated.com/en/products/interface/sensor-interface/MAX30102.html)
+Im Datenblatt zu den empfohlenen Konfigurationen zum Betrieb des MAX30102 wird empfohlen, den ADC auf seinen höchsten Gain (= Verstärkungseinstellung) zu setzen (full-scale range = 2,048 μA). Wenn der Kanal gesättigt ist, muss die Verstärkungseinstellung auf den nächst höheren Wert eingestellt werden. [[6]](https://www.maximintegrated.com/en/products/interface/sensor-interface/MAX30102.html)
 
 Der Sensor wird zur Befestigung am Bein in einem 3D gedruckten Gehäuse untergebracht (Abbildung 4). Anschließend wird ein Klettverschlussband oder ein dehnfähiges Band durch die Halterungsschlaufe hindurchgeführt und der Sensor wie in der Versuchsdurchführung beschrieben am Bein befestigt. Hierbei ist auf einen lockeren und nicht zu festen Anpressdruck zu achten!
 
