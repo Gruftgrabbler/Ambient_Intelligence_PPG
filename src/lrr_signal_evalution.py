@@ -28,7 +28,7 @@ class LRRCalculator:
         self.data = sensor_data
         self.data_dict = None
 
-    def calc_lrr_params(self) -> None:
+    def calc_lrr_params(self, normalize_amplitude=True) -> None:
         """
         This method calculates all LRR related parameters using the utiliy methods from lrr_analysis.py
          and signal_analysis.py.
@@ -39,15 +39,20 @@ class LRRCalculator:
         Venous pump capacity V_0 (%)
         venous pump function F_0(%s)
 
-
+        :param normalize_amplitude: whether the signal is normalized to the percentage deviation relative to the baseline
+        :type normalize_amplitude: bool
         :return: -
         :rtype: None
         """
         baseline, signal_start = calc_signal_baseline(self.data.red)
         # self.data.time = self.data.time - baseline.signal_start
 
+        if normalize_amplitude:
+            self.data.red = (self.data.red - baseline) / baseline * 100
+            baseline = 0
+
         signal_filtered, _, _ = filter_signal(self.data.red)
-        peaks, last_peak = calc_signal_peaks(signal_filtered, baseline)
+        peaks, last_peak = calc_signal_peaks(signal_filtered, baseline, normalize_amplitude)
         line, initial_refill_time, p3_idx, p3_time = calc_initial_refill_time(
             self.data.red, self.data.time, last_peak, baseline
         )
@@ -61,14 +66,23 @@ class LRRCalculator:
             time_idx_end_intersection,
         ) = calc_full_refill_time(self.data.red, self.data.time, baseline, last_peak)
 
-        venous_pump_capacity = (self.data.red[last_peak] - baseline) / baseline * 100
+        if normalize_amplitude:
+            venous_pump_capacity = self.data.red[last_peak]
 
-        x_np = np.array(self.data.time[last_peak:time_idx_end_intersection])
-        y_np = (
-                (np.array(self.data.red[last_peak:time_idx_end_intersection]) - baseline)
-                / baseline
-                * 100
-        )
+            x_np = np.array(self.data.time[last_peak:time_idx_end_intersection])
+            y_np = (
+                    (np.array(self.data.red[last_peak:time_idx_end_intersection]))
+            )
+        else:
+            venous_pump_capacity = (self.data.red[last_peak] - baseline) / baseline * 100
+
+            x_np = np.array(self.data.time[last_peak:time_idx_end_intersection])
+            y_np = (
+                    (np.array(self.data.red[last_peak:time_idx_end_intersection]) - baseline)
+                    / baseline
+                    * 100
+            )
+
         venous_pump_function = trapz(y_np, x_np)
 
         # Store all calculated data in a dictionary structure.
@@ -262,7 +276,7 @@ class LRRCalculator:
 
 
 def main():
-    file = "documentation/measurement_data/good_readings/data3.csv"
+    file = "../documentation/measurement_data/good_readings/data3.csv"
     data = read_datafile(file)
     ppg = LRRCalculator(data)
     ppg.calc_lrr_params()

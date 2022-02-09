@@ -7,8 +7,9 @@ from scipy.signal import butter, sosfreqz, sosfiltfilt, find_peaks
     This file contains some utilty signal analysis functions.
 """
 
+
 def filter_signal(
-    signal: np.ndarray, sampling_rate: int = 20, order: int = 4, lowpass_cutoff: int = 3
+        signal: np.ndarray, sampling_rate: int = 20, order: int = 4, lowpass_cutoff: int = 3
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
     Lowpass filter the given signal with the given parameters using a Butterworth Lowpass Filter from scipy.
@@ -56,18 +57,26 @@ def calc_signal_baseline(signal: np.ndarray, threshold: int = -50) -> Tuple[floa
     return baseline, signal_start
 
 
-def calc_signal_peaks(signal: np.ndarray, baseline: float) -> Tuple[np.ndarray, int]:
+def calc_signal_peaks(signal: np.ndarray, baseline: float, normalize_amplitude: bool) -> Tuple[np.ndarray, int]:
     """
     Calculate the time stems of all peaks of the given signal above the baseline.
     Return: Last Peak as int, all other peaks as np.list
 
     :param signal: signal which is going to be analysed
     :param baseline: baseline of the signal
+    :param normalize_amplitude: whether the signal is normalized to the percentage deviation relative to the baseline
     :return: peaks, last_peak
     """
-    peaks, _ = find_peaks(
-        signal, height=baseline + 10, threshold=1, distance=1, prominence=500
-    )
-    last_peak = peaks[-1]  # save the last peak in a special variable
-    peaks = peaks[:-1]  # remove last peak from the peaks list
-    return peaks, int(last_peak)
+    if normalize_amplitude:
+        peaks, _ = find_peaks(
+            signal, height=baseline + 0.5, prominence=2
+        )
+    else:
+        peaks, _ = find_peaks(
+            signal, height=baseline + 10, threshold=1, distance=1, prominence=500
+        )
+    if len(peaks) != 0:
+        last_peak = peaks[-1]  # save the last peak in a special variable
+        peaks = peaks[:-1]  # remove last peak from the peaks list
+        return peaks, int(last_peak)
+    raise IndexError('No Peaks Detected!')
