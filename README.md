@@ -44,12 +44,25 @@ Der MAX30102 PPG-Sensor enthält zwei Leuchtdioden (LEDs), eine infrarote LED (S
 |---------------|:--------------:|------------------------------------------------------------------------------------------------------------------------------------|
 | ledBrightness | 0x66 (= 20 mA) | Wertebereich (Hex-Dec=LED-Strom): 0-0=0mA (Off) to 0xFF-255=50mA <br /> 0x33-51=10mA. 0x66-102=20mA. 0x99-153=30mA. 0xCC-204=40mA  |
 | sampleAverage |        4       | Averages multiple samples then draw once, reduce data throughput, default 4 samples average                                        |
-| ledMode       |        3       | 1 = Red only, 2 = Red + IR, 3 = Red + IR + Green                                                                                   |
+| ledMode       |        1       | 1 = Red only, 2 = Red + IR, 3 = Red + IR + Green                                                                                   |
 | sampleRate    |      1000      | Valid options: 50, 100, 200, 400, 800, 1000, 1600, 3200                                                                            |
 | pulseWidth    |       411      | Valid options: 69, 118, 215, 411. The longer the pulse width, the wider the detection range. Default to be Max range               |
 | adcRange      |      2048      | ADC Measurement Range, default 4096 (nA)，15.63(pA) per LSB at 18 bits resolution                                                  |
 
-Die aufgeführten Werte wurden 
+Die aufgeführten Werte wurden anhand des Datenblatts zum MAX30102 Sensor ermittelt und experimentell anhand einer ausreichenden Signalqualität bestätigt [Quelle zum AN6409 Datenblatt].
+
+Bei der LRR-Messung wird die variable Lichtabsorption durch Schwankungen im venösen Blutvolumen gemessen. Daher ist für die Aufzeichnung der LRR-Kurve hauptsächlich das desoxygenierte Blut, bzw. die Absorption des Lichts durch desoxygenierte Hämoglobin von Relevanz. Dieses weist seine höchste Absorption im Wellenlängenbereich von 660-680 nm auf.
+Aus diesem Grund verwenden für die LRR-Messung nur die rote LED des MAX30102 Sensors.
+
+Die Pulsweite gibt an, wie lange das Abtastsignal aktiv ist. Je länger das Signal aktiv bleibt, desto mehr Energie wird verbraucht. Die Ansteuerungsfrequenz für die LEDs wird durch die Abtastrate bestimmt. Eine höhere Abtastrate führt zu einer höheren Ansteuerungsfrequenz und damit zu einem höheren Energieverbrauch. Die ideale Option für eine Wearable-Anwendung ist die Wahl einer geringeren Pulsbreite in Kombination mit einer geringeren Abtastrate, um den Energieverbrauch zu minimieren. Dies funktioniert jedoch nur bis zu einer gewissen Grenze, da die Pulsweite in einem umgekehrten Verhältnis zur Abtastrate steht. Dies ergibt sich aus der Überlegung, dass eine höhere Impulsbreite einer niedrigeren Antriebsfrequenz entspricht und umgekehrt. 
+
+Abbildung 3 zeigt die zulässigen Einstellungen für die Messung der Blutvolumenschwankungen im Einzel-LED-Modus. Die grau hinterlegten Felder entsprechen den Einstellungen, die nicht zulässig sind. Der Benutzer sollte die Impulsbreite und die Abtastungen pro Sekunde anpassen, um die besten Einstellungen für seine Anwendung und den zulässigen Energieverbrauch zu ermitteln.
+
+![pulse_width_configuration](https://github.com/Gruftgrabbler/Ambient_Intelligence_PPG/blob/main/documentation/images/MAX30102_pulse_width_configuration.png)
+
+**Abbildung 3:** Zulässige Einstellungen für die Herzfrequenz-Konfiguration. [[4]](https://pdfserv.maximintegrated.com/en/an/AN6409.pdf)
+
+In unserem Anwendungsfall ist der Energieverbrauch des Sensors unerheblich, da der Sensor nicht in einer Wearable-Anwendung mit begrenzter Energieversorgung eingesetzt wird, sondern über die Energiezufuhr vom ESP32 bzw. vom PC gespeist wird. 
 
 ## Datenaufnahme
 Zur Aufnahme und Speicherung der seriell übertragenen Messwerte durch den ESP32 wurde ein Python-Skript geschrieben (`real_time_plotter.py`). Der Python-Code erfasst die Daten und stellt diese in einem Echtzeit-Plotter grafisch dar. Zeitgleich werden die Messwerte direkt nach dem Empfang in einer *.csv-Datei gespeichert, was als Grundlage der nachfolgenden Analyse dient. 
@@ -59,11 +72,11 @@ Der Grund für die umgehende Datensicherung liegt in der hohen Eingangsgeschwind
 ## Vorverarbeitung der Daten
 Für den Import der Messdaten aus der resultierenden CSV-Datei und die anschließende Datenverarbeitung zur Analyse wurde ein zweites Skript geschrieben (`plot_csv.py`). Der erste Schritt bei der Verarbeitung der LRR-Daten besteht darin, die Basislinie unserer Messdaten zu ermitteln. Hierfür betrachten wir die Ableitung erster Ordnung und ermitteln den Startzeitpunkt der Fußbewegungen anhand des Kurvenanstiegs über einen experimentell ermittelten Grenzwert hinaus. Der letzte Zeitpunkt vor dem Überschreiten des Grenzwerts wird als Startzeitpunkt der Messdurchführung definiert, die zugehörige Signalamplitude als Basislinie.
 
-Im nächsten Schritt werden die Daten durch einen Tiefpass 4. Ordnung gefiltert. Die untere Grenzfrequenz wurde auf 3 Hz gewählt, um die Gleichstromkomponente der Daten zu entfernen. Anschließend werden die Zeitpunkte und Amplituden der lokalen Maxima mit der in Scipy integrierten Funktion *findpeaks* ermittelt. Für die weitere Analyse ist nur der zuletzt aufgetretene Höhepunkt nach Belastungsstop <img src="https://render.githubusercontent.com/render/math?math=R_{max}"> von Relevanz. In Abbildung 3 ist eine Messdurchführung mit relevanten Punkten für die weitere Analyse dargestellt.
+Im nächsten Schritt werden die Daten durch einen Tiefpass 4. Ordnung gefiltert. Die untere Grenzfrequenz wurde auf 3 Hz gewählt, um die Gleichstromkomponente der Daten zu entfernen. Anschließend werden die Zeitpunkte und Amplituden der lokalen Maxima mit der in Scipy integrierten Funktion *findpeaks* ermittelt. Für die weitere Analyse ist nur der zuletzt aufgetretene Höhepunkt nach Belastungsstop <img src="https://render.githubusercontent.com/render/math?math=R_{max}"> von Relevanz. In Abbildung 4 ist eine Messdurchführung mit relevanten Punkten für die weitere Analyse dargestellt.
 
 <img src="https://github.com/Gruftgrabbler/Ambient_Intelligence_PPG/blob/main/documentation/images/Messergebnis.png">
 
-**Abbildung 3:** Messdurchführung mit relevanten Punkten
+**Abbildung 4:** Messdurchführung mit relevanten Punkten
 
 
 ## Auswertung der Messergebnisse 
@@ -78,7 +91,7 @@ Die venöse Pumpleistung folgt aus der Signalamplitude, nachdem es mit der Ampli
 
 Die venöse Pumparbeit wird durch Integration der venösen Pumpleistung über das Zeitintervall zwischen <img src="https://render.githubusercontent.com/render/math?math=R_{max}"> und dem Ende des Kurvenabfalls am Schnittpunkt mit der Basislinie ermittelt.
 
-In Tabelle 2 sind die ermittelten quantitativen Parameter für das Messsignal in Abbildung 3 gelistet.
+In Tabelle 2 sind die ermittelten quantitativen Parameter für das Messsignal in Abbildung 4 gelistet.
 
 **Tabelle 2:** ermittelte Parameter aus der automatisierten Analyse der aufgezeichneten Messwerte 
 | Quantitative Parameter        | Messwerte |
