@@ -138,9 +138,9 @@ Stelle zunächst sicher, dass Python 3.8 auf dem Rechner installiert ist.
 ### Anleitung zur Messdurchführung
 1. Drucke das Gehäuse des PPG-Sensors mit einem 3D-Drucker aus und setze den MAX30102-Sensor ein. Führe anschließend ein Klettverschlussband oder ein dehnfähiges Band durch die Halterungsschlaufe hindurch und befestige den Sensor wie in der Versuchsdurchführung beschrieben am Bein. Hierbei ist auf einen lockeren und nicht zu festen Anpressdruck zu achten!
 2. Stelle eine Hardware Verbindung zwischen dem MAX30102-Sensor und dem ESP32 her
-3. Flashe den ESP32 mit der *MAX30102_Basic_Readings.ino* im Projektordner *arduino-sketches/MAX30102_Basic_Readings/*
-4. Führe das Skript `real_time_plotter.py` in der Python IDE deiner Wahl aus. Es öffnet sich eine GUI mit den Messsignalen der roten und infraroten LEDs. Zur problemlosen Analyse der Messdaten wird empfohlen, dass nur ein einziger vollständiger Messdurchgang pro csv-Datei gespeichert wird. Dies wird durch Beenden des Skripts nach Abschluss der Messung erreicht.
-5. Führe zur Bestimmung der diagnostisch relevanten quantitativen Parameter das Skript `plot_csv.py` aus. Sofern die Messung vorher korrekt durchgeführt wurde, gibt das Skript die gesuchten Parameter in der Konsole aus und stellt das Messsignal mitsamt einigen relevanten Punkten grafisch dar.
+3. Flashe den ESP32 mit der *MAX30102_Basic_Readings.ino* im Projektordner *embedded/arduino-sketches/MAX30102_Basic_Readings/*
+4. Führe das Skript `real_time_plotter.py` im Projektordner *src/serial/serial_plotter/* in der Python IDE deiner Wahl aus. Es öffnet sich eine GUI mit den Messsignalen der roten und infraroten LEDs. Zur problemlosen Analyse der Messdaten wird empfohlen, dass nur ein einziger vollständiger Messdurchgang pro csv-Datei gespeichert wird. Dies wird durch Beenden des Skripts nach Abschluss der Messung erreicht.
+5. Führe zur Bestimmung der diagnostisch relevanten quantitativen Parameter das Skript `lrr_signal_evaluation.py` im *src/* Ordner aus. Sofern die Messung vorher korrekt durchgeführt wurde, gibt das Skript die gesuchten Parameter in der Konsole aus und stellt das Messsignal mitsamt einigen relevanten Punkten grafisch dar.
 
 
 # Literaturverzeichnis
