@@ -49,20 +49,23 @@ Der MAX30102 PPG-Sensor enthält zwei Leuchtdioden (LEDs), eine infrarote LED (S
 | pulseWidth    |       411      | Valid options: 69, 118, 215, 411. The longer the pulse width, the wider the detection range. Default to be Max range               |
 | adcRange      |      2048      | ADC Measurement Range, default 4096 (nA)，15.63(pA) per LSB at 18 bits resolution                                                  |
 
-Die aufgeführten Werte wurden anhand des Datenblatts zum MAX30102 Sensor ermittelt und experimentell anhand einer ausreichenden Signalqualität bestätigt [Quelle zum AN6409 Datenblatt].
+Die aufgeführten Werte wurden anhand des Datenblatts zum MAX30102 Sensor ermittelt und experimentell anhand einer ausreichenden Signalqualität bestätigt [[4]](https://pdfserv.maximintegrated.com/en/an/AN6409.pdf).
 
 Bei der LRR-Messung wird die variable Lichtabsorption durch Schwankungen im venösen Blutvolumen gemessen. Daher ist für die Aufzeichnung der LRR-Kurve hauptsächlich das desoxygenierte Blut, bzw. die Absorption des Lichts durch desoxygenierte Hämoglobin von Relevanz. Dieses weist seine höchste Absorption im Wellenlängenbereich von 660-680 nm auf.
 Aus diesem Grund verwenden für die LRR-Messung nur die rote LED des MAX30102 Sensors.
 
-Die Pulsweite gibt an, wie lange das Abtastsignal aktiv ist. Je länger das Signal aktiv bleibt, desto mehr Energie wird verbraucht. Die Ansteuerungsfrequenz für die LEDs wird durch die Abtastrate bestimmt. Eine höhere Abtastrate führt zu einer höheren Ansteuerungsfrequenz und damit zu einem höheren Energieverbrauch. Die ideale Option für eine Wearable-Anwendung ist die Wahl einer geringeren Pulsbreite in Kombination mit einer geringeren Abtastrate, um den Energieverbrauch zu minimieren. Dies funktioniert jedoch nur bis zu einer gewissen Grenze, da die Pulsweite in einem umgekehrten Verhältnis zur Abtastrate steht. Dies ergibt sich aus der Überlegung, dass eine höhere Impulsbreite einer niedrigeren Antriebsfrequenz entspricht und umgekehrt. 
-
-Abbildung 3 zeigt die zulässigen Einstellungen für die Messung der Blutvolumenschwankungen im Einzel-LED-Modus. Die grau hinterlegten Felder entsprechen den Einstellungen, die nicht zulässig sind. Der Benutzer sollte die Impulsbreite und die Abtastungen pro Sekunde anpassen, um die besten Einstellungen für seine Anwendung und den zulässigen Energieverbrauch zu ermitteln.
+Abbildung 3 zeigt die zulässigen Einstellungen für die Messung der Blutvolumenschwankungen im Einzel-LED-Modus (Herzfrequenzmodus). Im Herzfrequenzmodus wird nur die rote LED verwendet, um optische Daten zu erfassen und die Herzfrequenz und/oder das Photoplethysmogramm (PPG) des Patienten zu bestimmen. Die grau hinterlegten Felder entsprechen den Einstellungen, die nicht zulässig sind. Der Benutzer sollte die Impulsbreite und die Abtastungen pro Sekunde anpassen, um die besten Einstellungen für seine Anwendung und den zulässigen Energieverbrauch zu ermitteln.
 
 ![pulse_width_configuration](https://github.com/Gruftgrabbler/Ambient_Intelligence_PPG/blob/main/documentation/images/MAX30102_pulse_width_configuration.png)
 
-**Abbildung 3:** Zulässige Einstellungen für die Pulsweiten-Konfiguration im Einzel-LED Betrieb. [[4]](https://pdfserv.maximintegrated.com/en/an/AN6409.pdf)
+**Abbildung 3:** Zulässige Einstellungen für die Pulsweiten-Konfiguration im Einzel-LED Betrieb (Herzfrequenzmodus). [[4]](https://pdfserv.maximintegrated.com/en/an/AN6409.pdf)
+
+Die Pulsweite gibt an, wie lange das Abtastsignal aktiv ist. Je länger das Signal aktiv bleibt, desto mehr Energie wird verbraucht. Die Ansteuerungsfrequenz für die LEDs wird durch die Abtastrate bestimmt. Eine höhere Abtastrate führt zu einer höheren Ansteuerungsfrequenz und damit zu einem höheren Energieverbrauch. Die ideale Option für eine Wearable-Anwendung ist die Wahl einer geringeren Pulsbreite in Kombination mit einer geringeren Abtastrate, um den Energieverbrauch zu minimieren. Dies funktioniert jedoch nur bis zu einer gewissen Grenze, da die Pulsweite in einem umgekehrten Verhältnis zur Abtastrate steht. Dies ergibt sich aus der Überlegung, dass eine höhere Impulsbreite einer niedrigeren Antriebsfrequenz entspricht und umgekehrt. 
 
 In unserem Anwendungsfall ist der Energieverbrauch des Sensors unerheblich, da der Sensor nicht in einer Wearable-Anwendung mit begrenzter Energieversorgung eingesetzt wird, sondern über die Energiezufuhr vom ESP32 bzw. vom PC gespeist wird. 
+
+Im Datenblatt zu den empfohlenen Konfigurationen zum Betrieb des MAX30102 wird empfohlen, den ADC auf seinen höchsten Gain (= Verstärkungseinstellung) zu setzen (full-scale range = 2,048 μA). Wenn der Kanal gesättigt ist, muss die Verstärkungseinstellung auf den nächst niedrigeren Wert eingestellt werden.
+
 
 ## Datenaufnahme
 Zur Aufnahme und Speicherung der seriell übertragenen Messwerte durch den ESP32 wurde ein Python-Skript geschrieben (`real_time_plotter.py`). Der Python-Code erfasst die Daten und stellt diese in einem Echtzeit-Plotter grafisch dar. Zeitgleich werden die Messwerte direkt nach dem Empfang in einer *.csv-Datei gespeichert, was als Grundlage der nachfolgenden Analyse dient. 
