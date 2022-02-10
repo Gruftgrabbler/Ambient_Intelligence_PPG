@@ -88,7 +88,7 @@ Im nächsten Schritt werden die Daten durch einen Tiefpass 4. Ordnung gefiltert.
 
 
 ## Auswertung der Messergebnisse 
-Die Berechnung der erfassten Messparameter ist der Fachliteratur entnommen [[7]](https://www.thieme-connect.de/products/ebooks/lookinside/10.1055/b-0034-8814)[[8]](https://eref.thieme.de/cockpits/clNuN0001clHAM0004/0/coNuN00260/4-910)[[9]](http://docplayer.org/19942299-Dynamische-venenfunktionstests-auf-dem-pruefstand.html):
+Die Berechnung der erfassten Messparameter ist der Fachliteratur entnommen [[7]](https://www.thieme-connect.de/products/ebooks/lookinside/10.1055/b-0034-8814)[[8]](https://eref.thieme.de/cockpits/clNuN0001clHAM0004/0/coNuN00260/4-910)[[9]](http://www.medpool.ch/geschuetzt/ch_seiten/med_300_/med_s123.htm)[[10]](http://docplayer.org/19942299-Dynamische-venenfunktionstests-auf-dem-pruefstand.html):
 
 1. Aus dem Zeitintervall zwischen <img src="https://render.githubusercontent.com/render/math?math=R_{max}"> und dem Ende des Kurvenabfalls am Schnittpunkt mit der Basislinie ergibt sich die venöse Auffüllzeit.
 
@@ -161,4 +161,6 @@ Stelle zunächst sicher, dass Python 3.8 auf dem Rechner installiert ist.
 
 [[8]](https://eref.thieme.de/cockpits/clNuN0001clHAM0004/0/coNuN00260/4-910) Ludwig M, Rieger J, Ruppert V. Auswertung. In: Ludwig M, Rieger J, Ruppert V, Hrsg. Gefäßmedizin in Klinik und Praxis. 2., komplett überarbeitete und aktualisierte Auflage. Stuttgart: Thieme; 2010. https://doi.org/10.1055/b-002-10340
 
-[[9]](http://docplayer.org/19942299-Dynamische-venenfunktionstests-auf-dem-pruefstand.html) Häfner, H. M., Bablich, H., Rassner, G., Jünger, M. & Steins, A. (2002). Dynamische Venenfunktionstests auf dem Prüfstand. Phlebologie, 31(04), 85–90. https://doi.org/10.1055/s-0037-1621393
+[[9]](http://www.medpool.ch/geschuetzt/ch_seiten/med_300_/med_s123.htm) Wosnitzka, H. (o. D.). PPG-Parameter bei CVI-Verlaufskontrolle – aus einer Pharmakotherapiestudie. medpool.ch. Abgerufen am 9. Februar 2022, von http://www.medpool.ch/geschuetzt/ch_seiten/med_300_/med_s123.htm
+
+[[10]](http://docplayer.org/19942299-Dynamische-venenfunktionstests-auf-dem-pruefstand.html) Häfner, H. M., Bablich, H., Rassner, G., Jünger, M. & Steins, A. (2002). Dynamische Venenfunktionstests auf dem Prüfstand. Phlebologie, 31(04), 85–90. https://doi.org/10.1055/s-0037-1621393
