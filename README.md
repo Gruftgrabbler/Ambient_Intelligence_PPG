@@ -52,7 +52,7 @@ Der MAX30102 PPG-Sensor enthält zwei Leuchtdioden (LEDs), eine infrarote LED (S
 Die aufgeführten Werte wurden anhand des Datenblatts zum MAX30102 Sensor ermittelt und experimentell anhand einer ausreichenden Signalqualität bestätigt [[5]](https://pdfserv.maximintegrated.com/en/an/AN6409.pdf).
 
 Bei der LRR-Messung wird die variable Lichtabsorption durch Schwankungen im venösen Blutvolumen gemessen. Daher ist für die Aufzeichnung der LRR-Kurve hauptsächlich das desoxygenierte Blut, bzw. die Absorption des Lichts durch desoxygenierte Hämoglobin von Relevanz. Dieses weist seine höchste Absorption im Wellenlängenbereich von 660-680 nm auf.
-Aus diesem Grund verwenden für die LRR-Messung nur die rote LED des MAX30102 Sensors.
+Aus diesem Grund wird für die LRR-Messung nur die rote LED des MAX30102 Sensors verwendet.
 
 Abbildung 3 zeigt die zulässigen Einstellungen für die Messung der Blutvolumenschwankungen im Einzel-LED-Modus (Herzfrequenzmodus). Im Herzfrequenzmodus wird nur die rote LED verwendet, um optische Daten zu erfassen und die Herzfrequenz und/oder das Photoplethysmogramm (PPG) des Patienten zu bestimmen. Die grau hinterlegten Felder entsprechen den Einstellungen, die nicht zulässig sind. Der Benutzer sollte die Impulsbreite und die Abtastungen pro Sekunde anpassen, um die besten Einstellungen für seine Anwendung und den zulässigen Energieverbrauch zu ermitteln.
 
